@@ -46,16 +46,32 @@ def get_existing_urls() -> set[str]:
         return {row['url'] for row in rows}
 
 
-def fetch_articles(source: str | None = None, limit: int | None = None) -> list[Article]:
+def fetch_articles(
+    source: str | None = None,
+    sort_by: str = "score",
+    limit: int = 20,
+    page: int = 1,
+) -> list[Article]:
     with get_connection() as conn:
-        query = "SELECT * FROM articles"
-        params = ()
+        conditions = []
+        params: list = []
         if source is not None:
-            query += " WHERE source = ?"
-            params = (source,)
-        if limit is not None:
-            query += " LIMIT ?"
-            params += (limit,)
+            conditions.append("source = ?")
+            params.append(source)
+        query = "SELECT * FROM articles"
+        if conditions:
+            query += " WHERE " + " AND ".join(conditions)
+        if sort_by == "published_at":
+            query += " ORDER BY published_at DESC"
+        else:
+            query += (
+                " ORDER BY CASE WHEN virality_view IS NULL THEN 1 ELSE 0 END,"
+                " CAST(json_extract(virality_view, '$.score') AS INTEGER) DESC,"
+                " published_at DESC"
+            )
+        offset = (page - 1) * limit
+        query += " LIMIT ? OFFSET ?"
+        params += [limit, offset]
         rows = conn.execute(query, params).fetchall()
         return [Article(**dict(row)) for row in rows]
 

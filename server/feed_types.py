@@ -1,3 +1,4 @@
+from enum import Enum
 import json
 from typing import Optional, TypedDict, NotRequired
 from time import struct_time
@@ -50,3 +51,7 @@ class Article(BaseModel):
         if isinstance(v, str):
             return json.loads(v)
         return v
+
+class SortBy(str, Enum):
+    score = "score"
+    published_at = "published_at"

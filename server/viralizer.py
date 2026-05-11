@@ -6,13 +6,13 @@ client = OpenAI()
 
 def check_virality(article: Article) -> None:
     response =  client.responses.parse(
-        model="gpt-5.5",
+        model="gpt-5.4-mini",
         input=[
             {
                 "role": "system",
                 "content": (
-                    "You are a viral content analyst specialising in tech news. "
-                    "Given an article's title, source and summary, rate how viral it could become "
+                    "You are a tech content analyst specialising in tech news. "
+                    "Given an article's title, source and summary, rate how breaking news it could become "
                     "on a scale of 0-100. Consider: headline impact, controversy, novelty, "
                     "emotional resonance, and shareability. "
                     "Return a score, a one-sentence reason, and up to 3 short tags."
