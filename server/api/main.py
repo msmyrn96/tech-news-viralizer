@@ -1,15 +1,15 @@
-import config
+from dotenv import load_dotenv
+load_dotenv()
+
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Query
-from feed_types import Article, SortBy
-from database import fetch_articles, fetch_single_article
-from scheduler import start_scheduler
+from shared.models import Article, SortBy
+from shared.database import fetch_articles, fetch_single_article, init_db
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    print("Starting server...")
-    start_scheduler()
+    init_db()
     yield
 
 
@@ -24,6 +24,7 @@ async def get_articles(
     page: int = Query(default=1, ge=1),
 ):
     return fetch_articles(source=source, sort_by=sort_by.value, limit=limit, page=page)
+
 
 @app.get("/articles/{article_id}", response_model=Article)
 async def get_article(article_id: int):

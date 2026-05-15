@@ -1,16 +1,13 @@
-import schedule
-import time
 import threading
 from concurrent.futures import ThreadPoolExecutor
-from scrapper import scrape, extract_image_src
-from database import create_article, init_db, get_existing_urls, reset_db, fetch_unscored_articles, update_article_virality
-from feed_types import Article, FeedEntry
-from viralizer import check_virality
-
+from shared.models import Article, FeedEntry
+from shared.database import create_article, get_existing_urls, fetch_unscored_articles
+from worker.scrapper import scrape, extract_image_src
+from worker.viralizer import check_virality
 
 seen_urls: set[str] = set()
-SCORE_CAP = 30       # max articles scored per scrape run
-DRIP_BATCH = 30      # articles scored per drip tick
+SCORE_CAP = 30
+DRIP_BATCH = 10
 
 
 def map_to_article(source: str, entry: FeedEntry) -> Article:
@@ -36,19 +33,21 @@ def job() -> None:
             new_articles.append(map_to_article(source, entry))
             seen_urls.add(url)
 
-    if new_articles:
-        for article in new_articles:
-            article.id = create_article(article)
-        print(f"Inserted {len(new_articles)} new articles")
-        # Score only the freshest SCORE_CAP articles; drip job handles the rest
-        to_score = sorted(
-            new_articles,
-            key=lambda a: a.published_at or '',
-            reverse=True,
-        )[:SCORE_CAP]
-        threading.Thread(target=score_articles, args=(to_score,), daemon=True).start()
-    else:
+    if not new_articles:
         print("No new articles found")
+        return
+
+    saved: list[Article] = []
+    for article in new_articles:
+        article_id = create_article(article)
+        if article_id:
+            article.id = article_id
+            saved.append(article)
+
+    print(f"Inserted {len(saved)} new articles")
+
+    to_score = sorted(saved, key=lambda a: a.published_at or '', reverse=True)[:SCORE_CAP]
+    threading.Thread(target=score_articles, args=(to_score,), daemon=True).start()
 
 
 def drip_score_job() -> None:
@@ -59,7 +58,6 @@ def drip_score_job() -> None:
 
 
 def score_articles(articles: list[Article]) -> None:
-
     def score(article: Article) -> None:
         if article.virality_view is not None:
             return
@@ -73,26 +71,6 @@ def score_articles(articles: list[Article]) -> None:
     print(f"Scored {len(articles)} articles")
 
 
-def start_scheduler() -> None:
-    reset_db()
-    print("Initializing scheduler...")
+def init_seen_urls() -> None:
     global seen_urls
-    print("Initializing database...")
-    init_db()
     seen_urls = get_existing_urls()
-    job()
-
-    schedule.every(5).minutes.do(job)
-    schedule.every(30).seconds.do(drip_score_job)
-
-    def loop():
-        while True:
-            schedule.run_pending()
-            time.sleep(1)
-
-    threading.Thread(target=loop, daemon=True).start()
-
-
-if __name__ == '__main__':
-    start_scheduler()
-    threading.Event().wait()  # keep process alive

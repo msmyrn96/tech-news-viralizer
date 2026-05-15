@@ -1,6 +1,6 @@
 import re
 import feedparser
-from feed_types import FeedEntry
+from shared.models import FeedEntry
 
 
 def extract_image_src(html: str | None) -> str | None:
@@ -35,7 +35,6 @@ def scrape() -> list[tuple[str, FeedEntry]]:
         d = feedparser.parse(url, etag=cache.get('etag'), modified=cache.get('modified'))
 
         if d.status == 304:
-            # Feed unchanged — reuse cached entries
             entries = cache.get('entries', [])
         else:
             entries = d.get('entries', [])
@@ -48,7 +47,3 @@ def scrape() -> list[tuple[str, FeedEntry]]:
         for entry in entries:
             result.append((source, entry))
     return result
-
-
-if __name__ == '__main__':
-    scrape()

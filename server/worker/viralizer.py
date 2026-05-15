@@ -1,12 +1,20 @@
 from openai import OpenAI
-from feed_types import Article,ViralScore
-from database import update_article_virality
+from shared.models import Article, ViralScore
+from shared.database import update_article_virality
 
-client = OpenAI()
+_client: OpenAI | None = None
+
+
+def _get_client() -> OpenAI:
+    global _client
+    if _client is None:
+        _client = OpenAI()
+    return _client
+
 
 def check_virality(article: Article) -> None:
-    response =  client.responses.parse(
-        model="gpt-5.4-mini",
+    response = _get_client().responses.parse(
+        model="gpt-4o-mini",
         input=[
             {
                 "role": "system",
@@ -29,8 +37,7 @@ def check_virality(article: Article) -> None:
         ],
         text_format=ViralScore,
     )
-    
+
     virality = response.output_parsed
-    
-    print(article,virality)
+    print(article.title, virality)
     update_article_virality(article.id, virality)

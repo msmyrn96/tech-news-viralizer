@@ -1,5 +1,5 @@
-from enum import Enum
 import json
+from enum import Enum
 from typing import Optional, TypedDict, NotRequired
 from time import struct_time
 from pydantic import BaseModel, field_validator
@@ -28,11 +28,13 @@ class FeedEntry(TypedDict):
     published_parsed: struct_time
     summary: str
     summary_detail: Detail
-    
+
+
 class ViralScore(BaseModel):
     score: int
     reason: str
     tags: list[str]
+
 
 class Article(BaseModel):
     id: Optional[int] = None
@@ -51,6 +53,7 @@ class Article(BaseModel):
         if isinstance(v, str):
             return json.loads(v)
         return v
+
 
 class SortBy(str, Enum):
     score = "score"
