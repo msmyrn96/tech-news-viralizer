@@ -12,7 +12,7 @@ export function Nav({ articleCount }: NavProps) {
           <div className="w-7 h-7 rounded-lg bg-amber-400 flex items-center justify-center flex-shrink-0">
             <WaveSine size={13} weight="bold" className="text-zinc-950" />
           </div>
-          <span className="text-sm font-semibold tracking-tight text-zinc-50 uppercase">
+          <span className="text-sm font-semibold tracking-[0.05em] text-zinc-50 uppercase">
             Signal
           </span>
           {articleCount !== undefined && articleCount > 0 && (

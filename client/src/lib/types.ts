@@ -9,11 +9,11 @@ export interface Article {
   title: string;
   source: string;
   url: string;
-  summary?: string;
-  published_at?: string;
-  read_time_seconds?: number;
-  image_url?: string;
-  virality_view?: ViralScore;
+  summary?: string | null;
+  published_at?: string | null;
+  read_time_seconds?: number | null;
+  image_url?: string | null;
+  virality_view?: ViralScore | null;
 }
 
 export type SortBy = 'score' | 'published_at';

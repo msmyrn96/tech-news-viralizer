@@ -1,0 +1,221 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-05-16T00:00:00Z",
+  "title": "Design System: Signal",
+  "extensions": {
+    "colorMeta": {
+      "accent": {
+        "role": "primary",
+        "displayName": "Alert Amber",
+        "canonical": "oklch(84% 0.17 83)",
+        "tonalRamp": [
+          "oklch(18% 0.04 83)",
+          "oklch(28% 0.08 83)",
+          "oklch(38% 0.11 83)",
+          "oklch(48% 0.14 83)",
+          "oklch(58% 0.16 83)",
+          "oklch(68% 0.17 83)",
+          "oklch(78% 0.17 83)",
+          "oklch(90% 0.08 83)"
+        ]
+      },
+      "surface-base": {
+        "role": "neutral",
+        "displayName": "Near-Void",
+        "canonical": "oklch(7% 0.004 285)",
+        "tonalRamp": [
+          "oklch(7% 0.004 285)",
+          "oklch(12% 0.004 285)",
+          "oklch(19% 0.005 285)",
+          "oklch(27% 0.005 285)",
+          "oklch(37% 0.006 285)",
+          "oklch(49% 0.006 285)",
+          "oklch(66% 0.006 285)",
+          "oklch(98% 0.003 285)"
+        ]
+      },
+      "surface-raised": {
+        "role": "neutral",
+        "displayName": "Graphite Surface",
+        "canonical": "oklch(12% 0.004 285)",
+        "tonalRamp": [
+          "oklch(7% 0.004 285)",
+          "oklch(12% 0.004 285)",
+          "oklch(19% 0.005 285)",
+          "oklch(27% 0.005 285)",
+          "oklch(37% 0.006 285)",
+          "oklch(49% 0.006 285)",
+          "oklch(66% 0.006 285)",
+          "oklch(98% 0.003 285)"
+        ]
+      },
+      "score-fire": {
+        "role": "tertiary",
+        "displayName": "Score Fire",
+        "canonical": "oklch(70% 0.19 22)",
+        "tonalRamp": [
+          "oklch(15% 0.06 22)",
+          "oklch(22% 0.10 22)",
+          "oklch(32% 0.14 22)",
+          "oklch(42% 0.17 22)",
+          "oklch(52% 0.19 22)",
+          "oklch(62% 0.19 22)",
+          "oklch(72% 0.18 22)",
+          "oklch(88% 0.08 22)"
+        ]
+      },
+      "score-hot": {
+        "role": "tertiary",
+        "displayName": "Score Hot",
+        "canonical": "oklch(76% 0.18 55)",
+        "tonalRamp": [
+          "oklch(16% 0.05 55)",
+          "oklch(24% 0.09 55)",
+          "oklch(34% 0.13 55)",
+          "oklch(44% 0.16 55)",
+          "oklch(54% 0.18 55)",
+          "oklch(64% 0.18 55)",
+          "oklch(74% 0.17 55)",
+          "oklch(89% 0.07 55)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Page-level headline. Used once per view. Never on article titles." },
+      "headline": { "displayName": "Headline", "purpose": "Featured article title. Most prominent story on screen." },
+      "title": { "displayName": "Title", "purpose": "Standard grid article titles. Tight tracking to preserve vertical rhythm." },
+      "body": { "displayName": "Body", "purpose": "Article summaries. Always line-clamped (2 standard, 3 featured). Max 65ch." },
+      "label": { "displayName": "Label", "purpose": "Source names, filter pills, sort toggle, metadata. Monospace + uppercase = categorical." }
+    },
+    "shadows": [
+      {
+        "name": "state-active",
+        "value": "0 1px 2px rgba(0,0,0,0.3)",
+        "purpose": "Active sort-toggle pill only. State indicator, not decorative elevation."
+      }
+    ],
+    "motion": [
+      {
+        "name": "card-hover",
+        "value": "translateY(-2px), Framer Motion spring stiffness 400 damping 30",
+        "purpose": "Article card hover lift. Gated behind prefers-reduced-motion: no-preference."
+      },
+      {
+        "name": "card-entrance",
+        "value": "opacity 0→1, y 16px→0, duration 380ms, delay i*70ms (max 500ms), ease [0.16,1,0.3,1]",
+        "purpose": "Staggered article card entrance. Gated behind prefers-reduced-motion."
+      },
+      {
+        "name": "image-hover",
+        "value": "scale(1.03), 500ms ease-out",
+        "purpose": "Article card image scale on card hover. Gives depth without motion in the layout."
+      },
+      {
+        "name": "live-ping",
+        "value": "animate-ping 1s cubic-bezier(0,0,0.2,1) infinite",
+        "purpose": "Nav live indicator outer ring. Signals the feed is actively updating."
+      }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Filter Pill Active",
+      "kind": "chip",
+      "refersTo": "filter-pill-active",
+      "description": "Active source or sort filter. Amber background = this filter is applied.",
+      "html": "<button class=\"ds-pill-active\">Hacker News</button>",
+      "css": ".ds-pill-active { background: #fbbf24; color: #09090b; border-radius: 9999px; padding: 6px 12px; font-family: 'Geist Mono', 'Courier New', monospace; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; border: none; cursor: pointer; transition: all 150ms; } .ds-pill-active:active { transform: scale(0.97); }"
+    },
+    {
+      "name": "Filter Pill Ghost",
+      "kind": "chip",
+      "refersTo": "filter-pill-ghost",
+      "description": "Inactive source filter. Zinc surface, no color.",
+      "html": "<button class=\"ds-pill-ghost\">The Verge</button>",
+      "css": ".ds-pill-ghost { background: #27272a; color: #a1a1aa; border-radius: 9999px; padding: 6px 12px; font-family: 'Geist Mono', 'Courier New', monospace; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; border: none; cursor: pointer; transition: all 150ms; } .ds-pill-ghost:hover { background: #3f3f46; color: #e4e4e7; } .ds-pill-ghost:active { transform: scale(0.97); }"
+    },
+    {
+      "name": "Virality Badge Fire",
+      "kind": "custom",
+      "refersTo": "badge-fire",
+      "description": "Score badge for articles ranked 80+. Red tier. Label required alongside color.",
+      "html": "<span class=\"ds-badge-fire\"><strong>89</strong><span class=\"ds-badge-sep\">·</span><span>FIRE</span></span>",
+      "css": ".ds-badge-fire { display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px; border-radius: 6px; background: rgba(69,10,10,0.6); color: #f87171; border: 1px solid rgba(185,28,28,0.6); font-family: 'Geist Mono', 'Courier New', monospace; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; } .ds-badge-sep { opacity: 0.5; }"
+    },
+    {
+      "name": "Virality Badge Hot",
+      "kind": "custom",
+      "refersTo": "badge-fire",
+      "description": "Score badge for articles ranked 60-79. Orange tier.",
+      "html": "<span class=\"ds-badge-hot\"><strong>73</strong><span class=\"ds-badge-sep\">·</span><span>HOT</span></span>",
+      "css": ".ds-badge-hot { display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px; border-radius: 6px; background: rgba(67,20,7,0.6); color: #fb923c; border: 1px solid rgba(194,65,12,0.6); font-family: 'Geist Mono', 'Courier New', monospace; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; } .ds-badge-sep { opacity: 0.5; }"
+    },
+    {
+      "name": "Virality Badge Trending",
+      "kind": "custom",
+      "refersTo": "badge-trending",
+      "description": "Score badge for articles ranked 40-59. Amber tier, matches the accent.",
+      "html": "<span class=\"ds-badge-trending\"><strong>52</strong><span class=\"ds-badge-sep\">·</span><span>TRENDING</span></span>",
+      "css": ".ds-badge-trending { display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px; border-radius: 6px; background: rgba(69,26,3,0.6); color: #fbbf24; border: 1px solid rgba(180,83,9,0.6); font-family: 'Geist Mono', 'Courier New', monospace; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; } .ds-badge-sep { opacity: 0.5; }"
+    },
+    {
+      "name": "Article Card",
+      "kind": "card",
+      "refersTo": "article-card",
+      "description": "Standard article card. Recedes behind content. Border lifts on hover.",
+      "html": "<a class=\"ds-card\" href=\"#\">\n  <div class=\"ds-card-body\">\n    <div class=\"ds-card-meta\">\n      <span class=\"ds-source\">HACKER NEWS</span>\n      <span class=\"ds-badge-fire\"><strong>89</strong><span style=\"opacity:.5\">·</span>FIRE</span>\n    </div>\n    <h2 class=\"ds-card-title\">Google says criminal hackers used AI to find a major software flaw</h2>\n    <p class=\"ds-card-summary\">Combining cybersecurity, AI hype, and criminal activity makes this highly newsworthy and likely to spread quickly across the tech web.</p>\n    <div class=\"ds-card-footer\">\n      <div class=\"ds-tags\">\n        <span class=\"ds-tag\">AI security</span>\n        <span class=\"ds-tag\">cybercrime</span>\n      </div>\n      <span class=\"ds-time\">3h ago</span>\n    </div>\n  </div>\n</a>",
+      "css": ".ds-card { display: flex; flex-direction: column; border-radius: 16px; border: 1px solid #27272a; background: #18181b; overflow: hidden; text-decoration: none; color: inherit; transition: border-color 200ms, background 200ms; } .ds-card:hover { border-color: #3f3f46; } .ds-card-body { display: flex; flex-direction: column; gap: 12px; padding: 20px; } .ds-card-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; } .ds-source { font-family: 'Geist Mono', monospace; font-size: 10px; font-weight: 500; color: #71717a; text-transform: uppercase; letter-spacing: 0.1em; } .ds-badge-fire { display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px; border-radius: 6px; background: rgba(69,10,10,0.6); color: #f87171; border: 1px solid rgba(185,28,28,0.6); font-family: 'Geist Mono', monospace; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; } .ds-card-title { margin: 0; font-family: 'Geist', system-ui, sans-serif; font-size: 15px; font-weight: 600; line-height: 1.35; letter-spacing: -0.015em; color: #e4e4e7; } .ds-card-summary { margin: 0; font-size: 13px; color: #71717a; line-height: 1.625; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; } .ds-card-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-top: 8px; } .ds-tags { display: flex; gap: 6px; flex-wrap: wrap; } .ds-tag { font-family: 'Geist Mono', monospace; font-size: 10px; color: #71717a; background: #27272a; padding: 2px 8px; border-radius: 4px; } .ds-time { font-family: 'Geist Mono', monospace; font-size: 11px; color: #52525b; flex-shrink: 0; }"
+    },
+    {
+      "name": "Nav Bar",
+      "kind": "nav",
+      "refersTo": null,
+      "description": "Sticky navigation. Minimal. Backdrop blur for scroll readability.",
+      "html": "<nav class=\"ds-nav\">\n  <div class=\"ds-nav-inner\">\n    <div class=\"ds-nav-left\">\n      <div class=\"ds-logo-mark\">\n        <svg width=\"13\" height=\"13\" viewBox=\"0 0 13 13\" fill=\"none\"><path d=\"M1 12L6.5 1L12 12\" stroke=\"#09090b\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>\n      </div>\n      <span class=\"ds-brand\">SIGNAL</span>\n      <span class=\"ds-count\">127 articles</span>\n    </div>\n    <div class=\"ds-nav-right\">\n      <span class=\"ds-tagline\">AI-ranked tech feed</span>\n      <span class=\"ds-live-dot\"></span>\n    </div>\n  </div>\n</nav>",
+      "css": ".ds-nav { position: sticky; top: 0; z-index: 40; width: 100%; border-bottom: 1px solid rgba(39,39,42,0.8); background: rgba(9,9,11,0.85); backdrop-filter: blur(12px); } .ds-nav-inner { max-width: 1280px; margin: 0 auto; padding: 0 24px; height: 52px; display: flex; align-items: center; justify-content: space-between; } .ds-nav-left { display: flex; align-items: center; gap: 12px; } .ds-logo-mark { width: 28px; height: 28px; border-radius: 8px; background: #fbbf24; display: flex; align-items: center; justify-content: center; flex-shrink: 0; } .ds-brand { font-family: 'Geist', system-ui, sans-serif; font-size: 14px; font-weight: 600; letter-spacing: 0.05em; color: #fafafa; text-transform: uppercase; } .ds-count { font-family: 'Geist Mono', monospace; font-size: 11px; color: #52525b; } .ds-nav-right { display: flex; align-items: center; gap: 10px; } .ds-tagline { font-family: 'Geist Mono', monospace; font-size: 11px; color: #52525b; } .ds-live-dot { position: relative; width: 8px; height: 8px; border-radius: 50%; background: #fbbf24; } .ds-live-dot::before { content: ''; position: absolute; inset: 0; border-radius: 50%; background: #fbbf24; opacity: 0.6; animation: ping 1s cubic-bezier(0,0,0.2,1) infinite; } @keyframes ping { 75%, 100% { transform: scale(2); opacity: 0; } }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Intelligence Terminal",
+    "overview": "Signal is a newsroom workstation, not a feed. The physical scene: a developer or founder glancing at a second monitor while compiling, wanting to know what is actually happening in tech without opening six tabs. The interface functions like a well-calibrated instrument: information present when you look, absent when you do not, never competing for the eye. Dark, precise, purposeful.\n\nColor strategy is Restrained: near-void charcoal surfaces with a single alert-amber accent used on no more than 10% of any screen. The amber is not decorative; it signals what matters. Every appearance of amber means the same thing: pay attention to this. Its rarity is the point.\n\nSignal explicitly rejects the consumer-magazine carousel (Flipboard, Apple News) and the noisy ad-funded news feed (TechCrunch, Mashable). The score is the only hierarchy signal that counts. Everything else recedes.",
+    "keyCharacteristics": [
+      "Near-void background; content reads like ink on slate",
+      "Alert amber as a single, semantic accent with one meaning: ranked above the noise",
+      "Geist Sans for editorial weight; Geist Mono for data, counts, and metadata",
+      "Flat surfaces throughout; depth via tonal layering, never shadows",
+      "Components recede; articles lead"
+    ],
+    "rules": [
+      { "name": "The One Signal Rule", "body": "Amber appears in exactly four places: virality badge (Trending tier), active filter pill, logo mark, live indicator dot. Any fifth use is a mistake. When in doubt, use zinc.", "section": "colors" },
+      { "name": "The No-Context-Free Color Rule", "body": "Score colors (red, orange, amber) never appear without an accompanying text label (FIRE, HOT, TRENDING, SIGNAL). Color alone cannot convey rank.", "section": "colors" },
+      { "name": "The Mono Data Rule", "body": "All numbers, timestamps, and counts use Geist Mono without exception. Proportional digits in a data context break alignment and look accidental.", "section": "typography" },
+      { "name": "The Title Ceiling Rule", "body": "Individual article titles never exceed Headline scale. Display scale belongs to the page, not to individual stories.", "section": "typography" },
+      { "name": "The Flat-By-Default Rule", "body": "No surface casts a shadow at rest. Hover and active states are expressed through border-color changes and translate transforms. If a resting element has a shadow, remove it.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do restrict amber to the four semantic uses: score badge (Trending tier), active filter pill, logo mark, live dot.",
+      "Do use Geist Mono for every number, timestamp, article count, and score.",
+      "Do express depth through tonal color shifts (Near-Void → Graphite Surface → Subtle Border). Shadows on resting elements are forbidden.",
+      "Do line-clamp article summaries (2 lines standard, 3 lines featured).",
+      "Do include the score text label alongside every score color.",
+      "Do gate all translate and scale animations behind prefers-reduced-motion: no-preference.",
+      "Do verify WCAG AA contrast on every new text/background pairing before shipping."
+    ],
+    "donts": [
+      "Don't use a carousel, cover-photo-first layout, or horizontal scrolling story grid. These are the Flipboard and Apple News patterns.",
+      "Don't add category color tabs, author photos, engagement counts (likes, shares), or any decoration that competes with the article title. These are TechCrunch and Mashable patterns.",
+      "Don't use gradient text. Score labels are solid-color text on a tinted background.",
+      "Don't add a second accent color. The system has one: alert amber.",
+      "Don't add box-shadow to a resting card.",
+      "Don't use a border-left thicker than 1px as a colored accent stripe.",
+      "Don't center the page headline. Left-aligned headings read as publications, not landing pages.",
+      "Don't use Inter or generic system-ui as the primary display font. Geist is the brand typeface."
+    ]
+  }
+}
