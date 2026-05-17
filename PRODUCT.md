@@ -10,7 +10,7 @@ Broader tech audience: developers, engineers, founders, and anyone who tracks th
 
 ## Product Purpose
 
-Signal is an AI-ranked tech news reader. It scrapes articles from sources across the tech web (Hacker News, The Verge, Wired, Engadget, etc.), scores each article's virality and cultural relevance using Claude, and surfaces the top stories ranked by impact rather than recency. Success looks like a reader who opens Signal instead of opening six browser tabs, because they trust it's already filtered the important from the forgettable.
+Viralizer is an AI-ranked tech news reader. It scrapes articles from sources across the tech web (Hacker News, The Verge, Wired, Engadget, etc.), scores each article's virality and cultural relevance using Claude, and surfaces the top stories ranked by impact rather than recency. Success looks like a reader who opens Viralizer instead of opening six browser tabs, because they trust it's already filtered the important from the forgettable.
 
 ## Brand Personality
 
@@ -23,7 +23,7 @@ Sharp, intelligent, direct. Like The Information or Stratechery: editorial confi
 
 ## Design Principles
 
-1. **Signal over noise** — UI surface area shrinks behind the content. Every visual element that doesn't help the reader evaluate a story faster should be removed.
+1. **Viralizer over noise** — UI surface area shrinks behind the content. Every visual element that doesn't help the reader evaluate a story faster should be removed.
 2. **Earned hierarchy** — Visual weight maps directly to virality score. The highest-scored story commands the most space and attention. Layout is not decoration; it communicates importance.
 3. **Respect the reader's time** — No splash screens, no loading ceremonies, no pagination that interrupts flow. Filtering and sorting respond instantly.
 4. **Dark by default, intentionally** — Tech readers often work across time zones, at night, across large monitors. Dark is a physical scene choice ("SRE at 2am on a 27-inch monitor") not a style gesture.

@@ -1,5 +1,5 @@
 ---
-name: Signal
+name: Viralizer
 description: AI-ranked tech news reader. Surfaces high-virality stories from across the tech web, ordered by cultural impact.
 colors:
   accent: "#fbbf24"
@@ -101,19 +101,20 @@ components:
     typography: "{typography.label}"
 ---
 
-# Design System: Signal
+# Design System: Viralizer
 
 ## 1. Overview
 
 **Creative North Star: "The Intelligence Terminal"**
 
-Signal is a newsroom workstation, not a feed. The physical scene: a developer or founder glancing at a second monitor while compiling, wanting to know what is actually happening in tech without opening six tabs. The interface functions like a well-calibrated instrument: information present when you look, absent when you do not, never competing for the eye. Dark, precise, purposeful.
+Viralizer is a newsroom workstation, not a feed. The physical scene: a developer or founder glancing at a second monitor while compiling, wanting to know what is actually happening in tech without opening six tabs. The interface functions like a well-calibrated instrument: information present when you look, absent when you do not, never competing for the eye. Dark, precise, purposeful.
 
 Color strategy is Restrained: near-void charcoal surfaces with a single alert-amber accent used on no more than 10% of any screen. The amber is not decorative; it signals what matters. Every appearance of amber, whether on a virality badge, a selected filter, or the live indicator dot, means the same thing: pay attention to this. Its rarity is the point.
 
-Signal explicitly rejects the consumer-magazine carousel (Flipboard, Apple News) and the noisy ad-funded news feed (TechCrunch, Mashable). No hero images that load before headlines, no category color tabs, no author avatars competing with article titles. The score is the only hierarchy signal that counts. Everything else recedes.
+Viralizer explicitly rejects the consumer-magazine carousel (Flipboard, Apple News) and the noisy ad-funded news feed (TechCrunch, Mashable). No hero images that load before headlines, no category color tabs, no author avatars competing with article titles. The score is the only hierarchy signal that counts. Everything else recedes.
 
 **Key Characteristics:**
+
 - Near-void background; content reads like ink on slate
 - Alert amber as a single, semantic accent with one meaning: ranked above the noise
 - Geist Sans for editorial weight; Geist Mono for data, counts, and metadata
@@ -125,9 +126,11 @@ Signal explicitly rejects the consumer-magazine carousel (Flipboard, Apple News)
 One accent. Eight neutral steps. A self-contained status layer for scores. Nothing else.
 
 ### Primary
+
 - **Alert Amber** (`#fbbf24`, oklch(84% 0.17 83)): The sole accent in the entire system. Legal uses: virality badge (Trending tier only), active filter pill, logo mark, live feed dot. Four uses and no more. If amber appears without one of these justifications, it is wrong.
 
 ### Neutral (tonal depth stack, darkest to lightest)
+
 - **Near-Void** (`#09090b`, oklch(7% 0.004 285)): Page canvas. Not pure black; zinc-tinted so it reads as charcoal, not void, on calibrated monitors.
 - **Graphite Surface** (`#18181b`, oklch(12% 0.004 285)): All card and container backgrounds. The entire elevation system lives in this single step above Near-Void.
 - **Subtle Border** (`#27272a`, oklch(19% 0.005 285)): Default borders, horizontal dividers, scrollbar thumb, skeleton fill. If a separator is needed and nothing is active, this is the color.
@@ -138,19 +141,21 @@ One accent. Eight neutral steps. A self-contained status layer for scores. Nothi
 - **Primary Text** (`#fafafa`, oklch(98% 0.003 285)): Article headlines, card titles, brand mark, active filter pill text on amber. Never pure white (`#ffffff`); the faint zinc tint (`chroma 0.003`) keeps it from clashing with the background on uncalibrated displays.
 
 ### Status Layer (score colors only; never used outside score badges)
+
 The status layer is a closed system. These four color pairs are reserved for virality badge tiers and nothing else. Introducing any status-layer color into a non-score context is prohibited.
 
-| Tier | Score | Text | Background |
-|------|-------|------|------------|
-| FIRE | 80–100 | `#f87171` oklch(70% 0.19 22) | `#450a0a` |
-| HOT | 60–79 | `#fb923c` oklch(76% 0.18 55) | `#431407` |
-| TRENDING | 40–59 | `#fbbf24` (= accent) | `#451a03` |
-| SIGNAL | 0–39 | `#71717a` (= Muted Text) | `#27272a` (= Subtle Border) |
+| Tier     | Score  | Text                         | Background                  |
+| -------- | ------ | ---------------------------- | --------------------------- |
+| FIRE     | 80–100 | `#f87171` oklch(70% 0.19 22) | `#450a0a`                   |
+| HOT      | 60–79  | `#fb923c` oklch(76% 0.18 55) | `#431407`                   |
+| TRENDING | 40–59  | `#fbbf24` (= accent)         | `#451a03`                   |
+| SIGNAL   | 0–39   | `#71717a` (= Muted Text)     | `#27272a` (= Subtle Border) |
 
 Each tier has a matching border at 60% opacity: `rgba(185,28,28,0.6)` / `rgba(194,65,12,0.6)` / `rgba(180,83,9,0.6)` / `rgba(82,82,91,0.6)`.
 
 ### Named Rules
-**The One Signal Rule.** Amber has four legal uses. A fifth is a mistake. No exceptions.
+
+**The One Viralizer Rule.** Amber has four legal uses. A fifth is a mistake. No exceptions.
 
 **The Closed Status Layer Rule.** Score colors (red-400, orange-400) are prohibited outside virality badge tiers. They are not available for general error states, warnings, or decorative purposes. For UI error states, use Primary Text weight contrast, not color.
 
@@ -170,21 +175,23 @@ Each tier has a matching border at 60% opacity: `rgba(185,28,28,0.6)` / `rgba(19
 
 The scale runs from 10px to 36px using a 1.154 ratio between body (13px) and title (15px), then stepping to headline (20-24px) and display (30-36px). The wide jump between Title and Headline is intentional: it creates a visible rank gap between the featured story and the grid.
 
-| Role | Family | Size | Weight | Line Height | Tracking | Where |
-|------|--------|------|--------|-------------|----------|-------|
-| Display | Geist | clamp(30px, 4vw, 36px) | 600 | 1.0 | -0.025em | Page headline, once per view |
-| Headline | Geist | clamp(20px, 2.5vw, 24px) | 600 | 1.25 | -0.02em | Featured article title only |
-| Title | Geist | 15px | 600 | 1.35 | -0.015em | Standard card titles |
-| Body | Geist | 13px | 400 | 1.625 | 0 | Article summaries (clamped 2-3 lines) |
-| Label | Geist Mono | 11px | 500 | — | 0.1em | Source name, filter pills, sort toggle |
-| Data | Geist Mono | 10-11px | 600 | — | 0.1em | Scores, timestamps, counts |
+| Role     | Family     | Size                     | Weight | Line Height | Tracking | Where                                  |
+| -------- | ---------- | ------------------------ | ------ | ----------- | -------- | -------------------------------------- |
+| Display  | Geist      | clamp(30px, 4vw, 36px)   | 600    | 1.0         | -0.025em | Page headline, once per view           |
+| Headline | Geist      | clamp(20px, 2.5vw, 24px) | 600    | 1.25        | -0.02em  | Featured article title only            |
+| Title    | Geist      | 15px                     | 600    | 1.35        | -0.015em | Standard card titles                   |
+| Body     | Geist      | 13px                     | 400    | 1.625       | 0        | Article summaries (clamped 2-3 lines)  |
+| Label    | Geist Mono | 11px                     | 500    | —           | 0.1em    | Source name, filter pills, sort toggle |
+| Data     | Geist Mono | 10-11px                  | 600    | —           | 0.1em    | Scores, timestamps, counts             |
 
 Body max line length: 65ch. Apply `max-width: 65ch` to summary paragraphs; unclipped text at variable width breaks rhythm.
 
 ### Font Feature Settings
+
 Geist Mono renders numbers with default lining figures. Apply `font-variant-numeric: tabular-nums` to any column of numbers so they align vertically. This is already correct in the nav article count and metadata row; preserve it in any new data-displaying context.
 
 ### Hierarchy
+
 - **Display** (the page, once): Left-aligned, not centered. Composed as a two-line editorial statement. The second line intentionally dims to Secondary Text (`#a1a1aa`) to create within-display contrast without using two type sizes.
 - **Headline** (the lead story, once): Horizontal featured card only. At `clamp(20px, 2.5vw, 24px)`, it reads at exactly one rank above Title without approaching Display's scale. If the featured card is removed, Headline is unused.
 - **Title** (every standard card): Semi-tight tracking (-0.015em) at 15px / 600 weight. Three lines maximum; add `-webkit-line-clamp: 3` if titles exceed this.
@@ -193,6 +200,7 @@ Geist Mono renders numbers with default lining figures. Apply `font-variant-nume
 - **Data** (measurements): Geist Mono, 600 weight, `tabular-nums`. Score numbers, timestamps, article counts. Bold within mono to give numbers authority over their mono context.
 
 ### Named Rules
+
 **The Mono Data Rule.** Every number, every timestamp, every count uses Geist Mono. Proportional digits in a data row break column alignment. If a new component displays numbers and they are not in Geist Mono, it is wrong.
 
 **The Title Ceiling Rule.** Article titles never exceed Headline scale. Display belongs to the page. A featured article title rendered at Display scale is a tabloid cover, not a news reader.
@@ -201,16 +209,18 @@ Geist Mono renders numbers with default lining figures. Apply `font-variant-nume
 
 ## 4. Elevation
 
-Signal is flat by intent. The depth hierarchy is tonal, not shadow-based: every surface sits one luminance step above the one beneath it (Near-Void `#09090b` → Graphite Surface `#18181b` → Subtle Border `#27272a`). Nothing floats; everything occupies the same plane.
+Viralizer is flat by intent. The depth hierarchy is tonal, not shadow-based: every surface sits one luminance step above the one beneath it (Near-Void `#09090b` → Graphite Surface `#18181b` → Subtle Border `#27272a`). Nothing floats; everything occupies the same plane.
 
 Shadows are absent at rest. A barely-perceptible `box-shadow: 0 1px 2px rgba(0,0,0,0.3)` appears on the active sort-toggle pill to separate the selected state from its container, but this is a state indicator, not decorative lift. The nav bar uses `backdrop-filter: blur(12px)` at `#09090b` 85% opacity; functional (maintains readability during scroll), not ambient.
 
 ### Named Rules
+
 **The Flat-By-Default Rule.** No surface casts a shadow at rest. Hover and active states are expressed through border-color changes (`#27272a` → `#3f3f46`) and translate transforms (`translateY(-2px)`). If a resting element has a shadow, remove it.
 
 ## 5. Components
 
 ### Filter Pills
+
 Quiet selection controls. The amber active state is the only non-zinc color across the entire filter bar; inactive pills are pure zinc.
 
 - **Shape:** Fully rounded (9999px)
@@ -222,9 +232,11 @@ Quiet selection controls. The amber active state is the only non-zinc color acro
 - **Press (:active):** `scale(0.97)` for 100ms; tactile confirmation without layout shift
 
 ### Sort Toggle
+
 A segmented pill-within-pill. Not two separate buttons. The outer container carries the `#27272a`/80% background and a 1px `#3f3f46`/50% border; the inner selected segment is `#3f3f46` background with amber text and a single `box-shadow: 0 1px 2px rgba(0,0,0,0.3)` (the only shadow in the system, carried because it is a state indicator). Unselected labels are Secondary Text (`#a1a1aa`); on hover they lift to Dim Text (`#e4e4e7`). Both segments share the same Geist Mono 11px uppercase label style as filter pills.
 
 ### Article Card (Standard)
+
 The primary surface. Cards recede; their job is to deliver title, score, and source, then disappear.
 
 - **Corner Style:** Gently rounded (16px radius)
@@ -238,6 +250,7 @@ The primary surface. Cards recede; their job is to deliver title, score, and sou
 - **Arrow icon:** opacity 0 at rest, opacity 1 on card hover, amber color. The only arrow in the system; its appearance confirms the card is a link
 
 ### Article Card (Featured)
+
 The first article in the feed receives featured treatment: larger, horizontal, more breathing room.
 
 - **Layout:** `flex-row` on `md:` and above; `flex-col` on mobile (image on top, content below)
@@ -248,22 +261,24 @@ The first article in the feed receives featured treatment: larger, horizontal, m
 - **Tag display:** up to 4 tags; standard cards show max 3
 
 ### Virality Badge
+
 Score display is a first-class UI element. Four semantic tiers, each with a matching color pair (text + tinted background) and a required text label. Color alone never carries the rank.
 
 - **Shape:** 6px radius (rounded-md)
 - **Layout:** `inline-flex gap-1.5`, score value in `font-bold`, mid-dot separator `·` at 50% opacity, uppercase label in 500 weight
 - **Font:** Geist Mono, 10px, `letter-spacing: 0.1em`, uppercase
 
-| Tier | Score | Text | Background | Border |
-|------|-------|------|------------|--------|
-| FIRE | 80–100 | `#f87171` | `#450a0a` | `rgba(185,28,28,0.6)` |
-| HOT | 60–79 | `#fb923c` | `#431407` | `rgba(194,65,12,0.6)` |
-| TRENDING | 40–59 | `#fbbf24` | `#451a03` | `rgba(180,83,9,0.6)` |
-| SIGNAL | 0–39 | `#71717a` | `#27272a` | `rgba(82,82,91,0.6)` |
+| Tier     | Score  | Text      | Background | Border                |
+| -------- | ------ | --------- | ---------- | --------------------- |
+| FIRE     | 80–100 | `#f87171` | `#450a0a`  | `rgba(185,28,28,0.6)` |
+| HOT      | 60–79  | `#fb923c` | `#431407`  | `rgba(194,65,12,0.6)` |
+| TRENDING | 40–59  | `#fbbf24` | `#451a03`  | `rgba(180,83,9,0.6)`  |
+| SIGNAL   | 0–39   | `#71717a` | `#27272a`  | `rgba(82,82,91,0.6)`  |
 
 The SIGNAL tier is the default state for articles not yet scored. It reads quietly and never draws attention.
 
 ### Navigation Bar
+
 Sticky, minimal. Exists to orient, not to decorate.
 
 - **Background:** Near-Void (`#09090b`) at 85% opacity with `backdrop-filter: blur(12px)` — functional blur, not decorative
@@ -274,6 +289,7 @@ Sticky, minimal. Exists to orient, not to decorate.
 - **Live indicator:** 8px amber dot with outer `animate-ping` ring at 60% opacity, `1s cubic-bezier(0,0,0.2,1) infinite`. Communicates that the feed updates without requiring a refresh control
 
 ### Tag Chips
+
 Descriptive labels attached to articles. Read-only at current scope; no interactivity.
 
 - **Background:** Subtle Border (`#27272a`)
@@ -284,6 +300,7 @@ Descriptive labels attached to articles. Read-only at current scope; no interact
 - **Future:** if tags become filterable, apply filter pill styling on tap. The visual grammar is established; the interaction layer is not yet implemented
 
 ### Empty State
+
 Displayed when a filter combination returns no articles, or before the first scrape run completes.
 
 - **Container:** centered, `padding-block: 112px` (py-28), no card border or background
@@ -294,6 +311,7 @@ Displayed when a filter combination returns no articles, or before the first scr
 - **No CTA button.** The state is temporary and self-resolving. A button would imply action the user cannot take.
 
 ### Loading Skeleton
+
 Matches the exact card layout it replaces. Spinners are prohibited.
 
 - **Fill:** Subtle Border (`#27272a`) rectangles; no rounded shimmer lines
@@ -305,7 +323,8 @@ Matches the exact card layout it replaces. Spinners are prohibited.
 ## 6. Do's and Don'ts
 
 ### Do:
-- **Do** restrict amber (`#fbbf24`) to the four semantic uses: score badge (Trending tier), active filter pill, logo mark, live dot. A fifth use dilutes the signal. If you need a new use, justify it against the One Signal Rule.
+
+- **Do** restrict amber (`#fbbf24`) to the four semantic uses: score badge (Trending tier), active filter pill, logo mark, live dot. A fifth use dilutes the signal. If you need a new use, justify it against the One Viralizer Rule.
 - **Do** use Geist Mono for every number, timestamp, article count, and score. Proportional digits in data contexts break alignment.
 - **Do** express depth through tonal color shifts (Near-Void → Graphite Surface → Subtle Border). Shadows on resting elements are forbidden.
 - **Do** line-clamp article summaries (2 lines standard, 3 lines featured). Variable-length body text breaks grid rhythm.
@@ -314,7 +333,8 @@ Matches the exact card layout it replaces. Spinners are prohibited.
 - **Do** verify WCAG AA contrast on every new text/background pairing before shipping. The weakest pair in the system, Muted Text on Graphite Surface (`#71717a` on `#18181b`), passes at 4.6:1.
 
 ### Don't:
-- **Don't** use a carousel, cover-photo-first layout, or horizontal scrolling story grid. These are the Flipboard and Apple News patterns: consumer-magazine, aesthetically loud, treating images as lead content. Signal treats headlines as lead content.
+
+- **Don't** use a carousel, cover-photo-first layout, or horizontal scrolling story grid. These are the Flipboard and Apple News patterns: consumer-magazine, aesthetically loud, treating images as lead content. Viralizer treats headlines as lead content.
 - **Don't** add category color tabs, author photos, engagement counts (likes, shares), or any decoration that competes with the article title for attention. These are TechCrunch and Mashable patterns.
 - **Don't** use gradient text. Score labels are solid-color text on a tinted background. Page headlines are `#fafafa` on `#09090b`. No gradient, no `background-clip: text`.
 - **Don't** add a second accent color. The system has one: alert amber. Adding purple, teal, green, or any color fragments the single signal amber is supposed to carry.

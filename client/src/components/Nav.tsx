@@ -1,7 +1,7 @@
-import { WaveSine } from '@phosphor-icons/react/dist/ssr';
+import { Activity } from "lucide-react"
 
 interface NavProps {
-  articleCount?: number;
+  articleCount?: number
 }
 
 export function Nav({ articleCount }: NavProps) {
@@ -10,10 +10,10 @@ export function Nav({ articleCount }: NavProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-13 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-7 h-7 rounded-lg bg-amber-400 flex items-center justify-center flex-shrink-0">
-            <WaveSine size={13} weight="bold" className="text-zinc-950" />
+            <Activity size={13} className="text-zinc-950" />
           </div>
           <span className="text-sm font-semibold tracking-[0.05em] text-zinc-50 uppercase">
-            Signal
+            Viralizer
           </span>
           {articleCount !== undefined && articleCount > 0 && (
             <span className="font-mono text-[11px] text-zinc-600 tabular-nums">
@@ -33,5 +33,5 @@ export function Nav({ articleCount }: NavProps) {
         </div>
       </div>
     </nav>
-  );
+  )
 }

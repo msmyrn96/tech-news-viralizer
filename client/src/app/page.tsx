@@ -1,13 +1,13 @@
-import { fetchArticles } from '@/lib/api';
-import { Nav } from '@/components/Nav';
-import { ArticleFeed } from '@/components/ArticleFeed';
+import { fetchArticles } from "@/lib/api"
+import { Nav } from "@/components/Nav"
+import { ArticleFeed } from "@/components/ArticleFeed"
 
-export const revalidate = 30;
+export const revalidate = 30
 
 export default async function Home() {
-  let articles = await fetchArticles({ sort_by: 'score', limit: 30 }).catch(
-    () => []
-  );
+  const articles = await fetchArticles({ sort_by: "score", limit: 30 }).catch(
+    () => [],
+  )
 
   return (
     <>
@@ -19,15 +19,18 @@ export default async function Home() {
           </p>
           <h1
             className="font-semibold tracking-tight text-zinc-50 leading-none"
-            style={{ fontSize: 'clamp(1.875rem, 4vw, 2.25rem)' }}
+            style={{ fontSize: "clamp(1.875rem, 4vw, 2.25rem)" }}
           >
-            What the industry<br />
-            <span className="text-zinc-400">is talking about.</span>
+            What the industry
+            <br />
+            <span className="text-zinc-400">is talking about </span>
+            <br />
+            <span className="text-zinc-500">right now</span>
           </h1>
         </div>
 
         <ArticleFeed initialArticles={articles} />
       </main>
     </>
-  );
+  )
 }

@@ -71,12 +71,12 @@ def fetch_articles(
             if conditions:
                 query += " WHERE " + " AND ".join(conditions)
             if sort_by == "published_at":
-                query += " ORDER BY published_at DESC NULLS LAST"
+                query += " ORDER BY published_at::timestamptz DESC NULLS LAST"
             else:
                 query += (
                     " ORDER BY CASE WHEN virality_view IS NULL THEN 1 ELSE 0 END,"
                     " (virality_view->>'score')::integer DESC NULLS LAST,"
-                    " published_at DESC NULLS LAST"
+                    " published_at::timestamptz DESC NULLS LAST"
                 )
             offset = (page - 1) * limit
             query += " LIMIT %s OFFSET %s"

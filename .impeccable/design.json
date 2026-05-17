@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2026-05-16T00:00:00Z",
-  "title": "Design System: Signal",
+  "title": "Design System: Viralizer",
   "extensions": {
     "colorMeta": {
       "accent": {
@@ -81,11 +81,26 @@
       }
     },
     "typographyMeta": {
-      "display": { "displayName": "Display", "purpose": "Page-level headline. Used once per view. Never on article titles." },
-      "headline": { "displayName": "Headline", "purpose": "Featured article title. Most prominent story on screen." },
-      "title": { "displayName": "Title", "purpose": "Standard grid article titles. Tight tracking to preserve vertical rhythm." },
-      "body": { "displayName": "Body", "purpose": "Article summaries. Always line-clamped (2 standard, 3 featured). Max 65ch." },
-      "label": { "displayName": "Label", "purpose": "Source names, filter pills, sort toggle, metadata. Monospace + uppercase = categorical." }
+      "display": {
+        "displayName": "Display",
+        "purpose": "Page-level headline. Used once per view. Never on article titles."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Featured article title. Most prominent story on screen."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Standard grid article titles. Tight tracking to preserve vertical rhythm."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Article summaries. Always line-clamped (2 standard, 3 featured). Max 65ch."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Source names, filter pills, sort toggle, metadata. Monospace + uppercase = categorical."
+      }
     },
     "shadows": [
       {
@@ -183,7 +198,7 @@
   ],
   "narrative": {
     "northStar": "The Intelligence Terminal",
-    "overview": "Signal is a newsroom workstation, not a feed. The physical scene: a developer or founder glancing at a second monitor while compiling, wanting to know what is actually happening in tech without opening six tabs. The interface functions like a well-calibrated instrument: information present when you look, absent when you do not, never competing for the eye. Dark, precise, purposeful.\n\nColor strategy is Restrained: near-void charcoal surfaces with a single alert-amber accent used on no more than 10% of any screen. The amber is not decorative; it signals what matters. Every appearance of amber means the same thing: pay attention to this. Its rarity is the point.\n\nSignal explicitly rejects the consumer-magazine carousel (Flipboard, Apple News) and the noisy ad-funded news feed (TechCrunch, Mashable). The score is the only hierarchy signal that counts. Everything else recedes.",
+    "overview": "Viralizer is a newsroom workstation, not a feed. The physical scene: a developer or founder glancing at a second monitor while compiling, wanting to know what is actually happening in tech without opening six tabs. The interface functions like a well-calibrated instrument: information present when you look, absent when you do not, never competing for the eye. Dark, precise, purposeful.\n\nColor strategy is Restrained: near-void charcoal surfaces with a single alert-amber accent used on no more than 10% of any screen. The amber is not decorative; it signals what matters. Every appearance of amber means the same thing: pay attention to this. Its rarity is the point.\n\nSignal explicitly rejects the consumer-magazine carousel (Flipboard, Apple News) and the noisy ad-funded news feed (TechCrunch, Mashable). The score is the only hierarchy signal that counts. Everything else recedes.",
     "keyCharacteristics": [
       "Near-void background; content reads like ink on slate",
       "Alert amber as a single, semantic accent with one meaning: ranked above the noise",
@@ -192,11 +207,31 @@
       "Components recede; articles lead"
     ],
     "rules": [
-      { "name": "The One Signal Rule", "body": "Amber appears in exactly four places: virality badge (Trending tier), active filter pill, logo mark, live indicator dot. Any fifth use is a mistake. When in doubt, use zinc.", "section": "colors" },
-      { "name": "The No-Context-Free Color Rule", "body": "Score colors (red, orange, amber) never appear without an accompanying text label (FIRE, HOT, TRENDING, SIGNAL). Color alone cannot convey rank.", "section": "colors" },
-      { "name": "The Mono Data Rule", "body": "All numbers, timestamps, and counts use Geist Mono without exception. Proportional digits in a data context break alignment and look accidental.", "section": "typography" },
-      { "name": "The Title Ceiling Rule", "body": "Individual article titles never exceed Headline scale. Display scale belongs to the page, not to individual stories.", "section": "typography" },
-      { "name": "The Flat-By-Default Rule", "body": "No surface casts a shadow at rest. Hover and active states are expressed through border-color changes and translate transforms. If a resting element has a shadow, remove it.", "section": "elevation" }
+      {
+        "name": "The One Viralizer Rule",
+        "body": "Amber appears in exactly four places: virality badge (Trending tier), active filter pill, logo mark, live indicator dot. Any fifth use is a mistake. When in doubt, use zinc.",
+        "section": "colors"
+      },
+      {
+        "name": "The No-Context-Free Color Rule",
+        "body": "Score colors (red, orange, amber) never appear without an accompanying text label (FIRE, HOT, TRENDING, SIGNAL). Color alone cannot convey rank.",
+        "section": "colors"
+      },
+      {
+        "name": "The Mono Data Rule",
+        "body": "All numbers, timestamps, and counts use Geist Mono without exception. Proportional digits in a data context break alignment and look accidental.",
+        "section": "typography"
+      },
+      {
+        "name": "The Title Ceiling Rule",
+        "body": "Individual article titles never exceed Headline scale. Display scale belongs to the page, not to individual stories.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat-By-Default Rule",
+        "body": "No surface casts a shadow at rest. Hover and active states are expressed through border-color changes and translate transforms. If a resting element has a shadow, remove it.",
+        "section": "elevation"
+      }
     ],
     "dos": [
       "Do restrict amber to the four semantic uses: score badge (Trending tier), active filter pill, logo mark, live dot.",
