@@ -3,6 +3,7 @@ load_dotenv()
 
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Query
+from fastapi.middleware.cors import CORSMiddleware
 from shared.models import Article, SortBy
 from shared.database import fetch_articles, fetch_single_article, init_db
 
@@ -14,6 +15,13 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["GET"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/articles", response_model=list[Article])
