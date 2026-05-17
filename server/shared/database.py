@@ -124,3 +124,10 @@ def update_article_virality(article_id: int, virality: ViralScore) -> None:
                 "UPDATE articles SET virality_view = %s WHERE id = %s",
                 (json.dumps(virality.model_dump()), article_id),
             )
+
+
+def delete_all_articles() -> int:
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute("DELETE FROM articles")
+            return cur.rowcount

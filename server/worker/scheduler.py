@@ -1,7 +1,7 @@
 import threading
 from concurrent.futures import ThreadPoolExecutor
 from shared.models import Article, FeedEntry
-from shared.database import create_article, get_existing_urls, fetch_unscored_articles
+from shared.database import create_article, get_existing_urls, fetch_unscored_articles, delete_all_articles
 from worker.scrapper import scrape, extract_image_src
 from worker.viralizer import check_virality
 
@@ -74,3 +74,11 @@ def score_articles(articles: list[Article]) -> None:
 def init_seen_urls() -> None:
     global seen_urls
     seen_urls = get_existing_urls()
+
+
+def daily_reset_job() -> None:
+    global seen_urls
+    deleted = delete_all_articles()
+    seen_urls = set()
+    print(f"Daily reset: deleted {deleted} articles")
+    job()

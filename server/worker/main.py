@@ -4,7 +4,7 @@ load_dotenv()
 import schedule
 import time
 from shared.database import init_db
-from worker.scheduler import job, drip_score_job, init_seen_urls
+from worker.scheduler import job, drip_score_job, init_seen_urls, daily_reset_job
 
 
 def main() -> None:
@@ -18,6 +18,7 @@ def main() -> None:
 
     schedule.every(5).minutes.do(job)
     schedule.every(60).seconds.do(drip_score_job)
+    schedule.every().day.at("05:00").do(daily_reset_job)
 
     print("Worker running. Ctrl+C to stop.")
     while True:
