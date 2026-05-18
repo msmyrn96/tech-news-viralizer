@@ -43,6 +43,20 @@ export function ArticleFeed({ initialArticles }: ArticleFeedProps) {
   const allArticles = data?.pages.flat() ?? initialArticles
   const [featured, ...rest] = allArticles
 
+  const sentinelRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current
+    if (!sentinel) return
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+        fetchNextPage()
+      }
+    })
+    observer.observe(sentinel)
+    return () => observer.disconnect()
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage])
+
   const sources = useMemo(() => {
     const seen = new Set<string>()
     return initialArticles
@@ -174,6 +188,36 @@ export function ArticleFeed({ initialArticles }: ArticleFeedProps) {
           )}
         </>
       )}
+
+      {/* Loading next page */}
+      {isFetchingNextPage && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div
+              key={i}
+              className="rounded-2xl bg-zinc-900 border border-zinc-800 animate-pulse overflow-hidden"
+            >
+              <div className="aspect-video bg-zinc-800" />
+              <div className="p-5 flex flex-col gap-3">
+                <div className="h-3 bg-zinc-800 rounded w-1/3" />
+                <div className="h-5 bg-zinc-800 rounded w-5/6" />
+                <div className="h-3 bg-zinc-800 rounded w-full" />
+                <div className="h-3 bg-zinc-800 rounded w-3/4" />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* All caught up */}
+      {!hasNextPage && allArticles.length > 0 && !isLoading && (
+        <p className="text-center text-zinc-600 font-mono text-xs py-6">
+          — all caught up —
+        </p>
+      )}
+
+      {/* Scroll sentinel */}
+      <div ref={sentinelRef} />
     </div>
   )
 }
