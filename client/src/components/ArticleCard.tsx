@@ -8,7 +8,7 @@ import { ViralityReason } from "./ViralityReason"
 import { readTime, relativeTime } from "@/lib/helpers"
 
 interface ArticleCardProps {
-  article: Article
+  article?: Article
   featured?: boolean
   index?: number
 }
@@ -18,15 +18,14 @@ export function ArticleCard({
   featured = false,
   index = 0,
 }: ArticleCardProps) {
-  const { score, tags, reason } = article.virality_view || {}
-  const time = relativeTime(article.published_at ?? undefined)
-  const rt = readTime(article.read_time_seconds ?? undefined)
-  //const summary = article.summary ? stripHtml(article.summary) : ""
-  const image = article.image_url
+  const { score, tags, reason } = article?.virality_view || {}
+  const time = relativeTime(article?.published_at ?? undefined)
+  const rt = readTime(article?.read_time_seconds ?? undefined)
+  const image = article?.image_url
 
   return (
     <motion.a
-      href={article.url}
+      href={article?.url}
       target="_blank"
       rel="noopener noreferrer"
       initial={{ opacity: 0, y: 16 }}
@@ -71,12 +70,12 @@ export function ArticleCard({
 
       <div
         className={`flex flex-col gap-3 p-5 flex-1 min-w-0 ${
-          featured && article.image_url ? "md:py-7 md:px-7 justify-center" : ""
-        } ${featured && !article.image_url ? "md:py-8 md:px-7" : ""}`}
+          featured && article?.image_url ? "md:py-7 md:px-7 justify-center" : ""
+        } ${featured && !article?.image_url ? "md:py-8 md:px-7" : ""}`}
       >
         <div className="flex items-center gap-2 flex-wrap">
           <span className="text-[10px] font-mono font-medium text-zinc-500 uppercase tracking-[0.1em]">
-            {article.source}
+            {article?.source}
           </span>
           {score !== undefined && <ViralityBadge score={score} />}
         </div>
@@ -86,7 +85,7 @@ export function ArticleCard({
             featured ? "text-xl md:text-2xl" : "text-[15px]"
           }`}
         >
-          {article.title}
+          <div dangerouslySetInnerHTML={{ __html: article?.title ?? "" }} />
         </h2>
 
         {reason && <ViralityReason reason={reason} />}
@@ -110,7 +109,7 @@ export function ArticleCard({
                 {rt}
               </span>
             )}
-            {time && <span>{time}</span>}
+            {time && <span suppressHydrationWarning>{time}</span>}
             <ArrowUpRight
               size={13}
               className="opacity-0 group-hover:opacity-100 transition-opacity text-amber-400"

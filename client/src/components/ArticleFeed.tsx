@@ -39,18 +39,31 @@ export function ArticleFeed({ initialArticles }: ArticleFeedProps) {
   const [featured, ...rest] = allArticles
 
   const sentinelRef = useRef<HTMLDivElement>(null)
+  const hasNextPageRef = useRef(hasNextPage)
+  const isFetchingNextPageRef = useRef(isFetchingNextPage)
 
   useEffect(() => {
     const sentinel = sentinelRef.current
     if (!sentinel) return
-    const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
-        fetchNextPage()
-      }
-    })
+
+    isFetchingNextPageRef.current = isFetchingNextPage
+    hasNextPageRef.current = hasNextPage
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (
+          entries[0].isIntersecting &&
+          hasNextPageRef.current &&
+          !isFetchingNextPageRef.current
+        ) {
+          fetchNextPage()
+        }
+      },
+      { rootMargin: "200px" },
+    )
     observer.observe(sentinel)
     return () => observer.disconnect()
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage])
+  }, [fetchNextPage, isFetchingNextPage, hasNextPage])
 
   const sources = useMemo(() => {
     const seen = new Set<string>()
@@ -153,61 +166,55 @@ export function ArticleFeed({ initialArticles }: ArticleFeedProps) {
       )}
 
       {/* Articles */}
-      {!isLoading && (
-        <>
-          {featured && <ArticleCard article={featured} featured index={0} />}
+      <div className="animate-fade-in flex flex-col gap-6">
+        {featured && <ArticleCard article={featured} featured index={0} />}
 
-          {rest.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {rest.map((article, i) => {
-                return (
-                  <>
-                    <ArticleCard
-                      key={article.id}
-                      article={article}
-                      index={i + 1}
-                    />
-                  </>
-                )
-              })}
-              {isFetchingNextPage && (
-                <div className="grid grid-cols-1 gap-4">
-                  <div className="rounded-2xl bg-zinc-900 border border-zinc-800 animate-pulse overflow-hidden">
+        {rest.length > 0 && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {rest.map((article, i) => {
+              console.log()
+              return (
+                <ArticleCard key={article.id} article={article} index={i + 1} />
+              )
+            })}
+            {isFetchingNextPage && (
+              <>
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div
+                    className="rounded-2xl bg-zinc-900 border border-zinc-800 animate-pulse overflow-hidden"
+                    key={i + "skeleton"}
+                  >
                     <div className="aspect-video bg-zinc-800" />
                     <div className="p-5 flex flex-col gap-3">
                       <div className="h-3 bg-zinc-800 rounded w-1/3" />
                       <div className="h-5 bg-zinc-800 rounded w-5/6" />
                       <div className="h-3 bg-zinc-800 rounded w-full" />
                       <div className="h-3 bg-zinc-800 rounded w-3/4" />
-                      <div className="h-3 bg-zinc-800 rounded w-1/3" />
-                      <div className="h-5 bg-zinc-800 rounded w-5/6" />
-                      <div className="h-3 bg-zinc-800 rounded w-full" />
-                      <div className="h-3 bg-zinc-800 rounded w-3/4" />
                     </div>
                   </div>
-                </div>
-              )}
-            </div>
-          )}
+                ))}
+              </>
+            )}
+          </div>
+        )}
 
-          {allArticles.length === 0 && (
-            <div className="flex flex-col items-center justify-center py-28 text-center gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center">
-                <Search size={22} className="text-zinc-500" />
-              </div>
-              <div>
-                <p className="text-zinc-400 font-medium text-sm">
-                  No articles yet
-                </p>
-                <p className="text-zinc-500 text-xs mt-1 max-w-xs leading-relaxed">
-                  Articles will appear once the scraper runs. Check back in a
-                  moment.
-                </p>
-              </div>
+        {allArticles.length === 0 && (
+          <div className="flex flex-col items-center justify-center py-28 text-center gap-4">
+            <div className="w-14 h-14 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center">
+              <Search size={22} className="text-zinc-500" />
             </div>
-          )}
-        </>
-      )}
+            <div>
+              <p className="text-zinc-400 font-medium text-sm">
+                No articles yet
+              </p>
+              <p className="text-zinc-500 text-xs mt-1 max-w-xs leading-relaxed">
+                Articles will appear once the scraper runs. Check back in a
+                moment.
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* Loading next page */}
 
