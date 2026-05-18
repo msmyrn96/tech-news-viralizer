@@ -2,8 +2,6 @@ import { fetchArticles } from "@/lib/api"
 import { Nav } from "@/components/Nav"
 import { ArticleFeed } from "@/components/ArticleFeed"
 
-export const revalidate = 30
-
 export default async function Home() {
   const articles = await fetchArticles({ sort_by: "score", limit: 20 }).catch(
     () => [],
@@ -21,7 +19,7 @@ export default async function Home() {
             className="font-semibold tracking-tight text-zinc-50 leading-none"
             style={{ fontSize: "clamp(1.875rem, 4vw, 2.25rem)" }}
           >
-            What the industry
+            What the world
             <br />
             <span className="text-zinc-400">is talking about </span>
             <br />

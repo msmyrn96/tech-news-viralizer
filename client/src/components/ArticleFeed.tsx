@@ -15,30 +15,25 @@ export function ArticleFeed({ initialArticles }: ArticleFeedProps) {
   const [sortBy, setSortBy] = useState<SortBy>("score")
   const [activeSource, setActiveSource] = useState<string | null>(null)
 
-  const {
-    data,
-    isLoading,
-    isFetchingNextPage,
-    hasNextPage,
-    fetchNextPage,
-  } = useInfiniteQuery({
-    queryKey: ["articles", sortBy, activeSource],
-    queryFn: ({ pageParam }) =>
-      fetchArticles({
-        sort_by: sortBy,
-        source: activeSource ?? undefined,
-        limit: 20,
-        page: pageParam,
-      }),
-    initialPageParam: 1,
-    getNextPageParam: (lastPage, _allPages, lastPageParam) =>
-      lastPage.length === 20 ? lastPageParam + 1 : undefined,
-    initialData:
-      sortBy === "score" && activeSource === null
-        ? { pages: [initialArticles], pageParams: [1] }
-        : undefined,
-    staleTime: 30_000,
-  })
+  const { data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage } =
+    useInfiniteQuery({
+      queryKey: ["articles", sortBy, activeSource],
+      queryFn: ({ pageParam }) =>
+        fetchArticles({
+          sort_by: sortBy,
+          source: activeSource ?? undefined,
+          limit: 20,
+          page: pageParam,
+        }),
+      initialPageParam: 1,
+      getNextPageParam: (lastPage, _allPages, lastPageParam) =>
+        lastPage.length === 20 ? lastPageParam + 1 : undefined,
+      initialData:
+        sortBy === "score" && activeSource === null
+          ? { pages: [initialArticles], pageParams: [1] }
+          : undefined,
+      staleTime: 30_000,
+    })
 
   const allArticles = data?.pages.flat() ?? initialArticles
   const [featured, ...rest] = allArticles
@@ -164,9 +159,34 @@ export function ArticleFeed({ initialArticles }: ArticleFeedProps) {
 
           {rest.length > 0 && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {rest.map((article, i) => (
-                <ArticleCard key={article.id} article={article} index={i + 1} />
-              ))}
+              {rest.map((article, i) => {
+                return (
+                  <>
+                    <ArticleCard
+                      key={article.id}
+                      article={article}
+                      index={i + 1}
+                    />
+                  </>
+                )
+              })}
+              {isFetchingNextPage && (
+                <div className="grid grid-cols-1 gap-4">
+                  <div className="rounded-2xl bg-zinc-900 border border-zinc-800 animate-pulse overflow-hidden">
+                    <div className="aspect-video bg-zinc-800" />
+                    <div className="p-5 flex flex-col gap-3">
+                      <div className="h-3 bg-zinc-800 rounded w-1/3" />
+                      <div className="h-5 bg-zinc-800 rounded w-5/6" />
+                      <div className="h-3 bg-zinc-800 rounded w-full" />
+                      <div className="h-3 bg-zinc-800 rounded w-3/4" />
+                      <div className="h-3 bg-zinc-800 rounded w-1/3" />
+                      <div className="h-5 bg-zinc-800 rounded w-5/6" />
+                      <div className="h-3 bg-zinc-800 rounded w-full" />
+                      <div className="h-3 bg-zinc-800 rounded w-3/4" />
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
@@ -190,24 +210,6 @@ export function ArticleFeed({ initialArticles }: ArticleFeedProps) {
       )}
 
       {/* Loading next page */}
-      {isFetchingNextPage && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <div
-              key={i}
-              className="rounded-2xl bg-zinc-900 border border-zinc-800 animate-pulse overflow-hidden"
-            >
-              <div className="aspect-video bg-zinc-800" />
-              <div className="p-5 flex flex-col gap-3">
-                <div className="h-3 bg-zinc-800 rounded w-1/3" />
-                <div className="h-5 bg-zinc-800 rounded w-5/6" />
-                <div className="h-3 bg-zinc-800 rounded w-full" />
-                <div className="h-3 bg-zinc-800 rounded w-3/4" />
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
 
       {/* All caught up */}
       {!hasNextPage && allArticles.length > 0 && !isLoading && (
