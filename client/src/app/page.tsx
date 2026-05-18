@@ -5,7 +5,7 @@ import { ArticleFeed } from "@/components/ArticleFeed"
 export const revalidate = 30
 
 export default async function Home() {
-  const articles = await fetchArticles({ sort_by: "score", limit: 30 }).catch(
+  const articles = await fetchArticles({ sort_by: "score", limit: 20 }).catch(
     () => [],
   )
 
