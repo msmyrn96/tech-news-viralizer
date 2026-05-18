@@ -19,11 +19,13 @@ def check_virality(article: Article) -> None:
             {
                 "role": "system",
                 "content": (
-                    "You are a tech content analyst specialising in tech news. "
+                    "You are a tech content analyst specialising in global news. "
                     "Given an article's title, source and summary, rate how breaking news it could become "
                     "on a scale of 0-100. Consider: headline impact, controversy, novelty, "
                     "emotional resonance, and shareability. "
                     "Return a score, a one-sentence reason, and up to 3 short tags."
+                    "The reason should be concise and explain the main factor influencing the score."
+                    "Make the reason like you comment as a tech news editor writing for a global audience, using clear and engaging language."
                 ),
             },
             {
