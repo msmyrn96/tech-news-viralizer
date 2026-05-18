@@ -1,7 +1,7 @@
 "use client"
 
-import { useState, useMemo } from "react"
-import { useQuery } from "@tanstack/react-query"
+import { useState, useMemo, useRef, useEffect } from "react"
+import { useInfiniteQuery } from "@tanstack/react-query"
 import { Flame, Calendar, Search } from "lucide-react"
 import type { Article, SortBy } from "@/lib/types"
 import { fetchArticles } from "@/lib/api"
@@ -15,12 +15,33 @@ export function ArticleFeed({ initialArticles }: ArticleFeedProps) {
   const [sortBy, setSortBy] = useState<SortBy>("score")
   const [activeSource, setActiveSource] = useState<string | null>(null)
 
-  const { data: articles = initialArticles, isLoading } = useQuery({
+  const {
+    data,
+    isLoading,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+  } = useInfiniteQuery({
     queryKey: ["articles", sortBy, activeSource],
-    queryFn: () => fetchArticles({ sort_by: sortBy, source: activeSource ?? undefined, limit: 30 }),
-    initialData: sortBy === "score" && activeSource === null ? initialArticles : undefined,
+    queryFn: ({ pageParam }) =>
+      fetchArticles({
+        sort_by: sortBy,
+        source: activeSource ?? undefined,
+        limit: 20,
+        page: pageParam,
+      }),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, _allPages, lastPageParam) =>
+      lastPage.length === 20 ? lastPageParam + 1 : undefined,
+    initialData:
+      sortBy === "score" && activeSource === null
+        ? { pages: [initialArticles], pageParams: [1] }
+        : undefined,
     staleTime: 30_000,
   })
+
+  const allArticles = data?.pages.flat() ?? initialArticles
+  const [featured, ...rest] = allArticles
 
   const sources = useMemo(() => {
     const seen = new Set<string>()
@@ -32,8 +53,6 @@ export function ArticleFeed({ initialArticles }: ArticleFeedProps) {
         return true
       })
   }, [initialArticles])
-
-  const [featured, ...rest] = articles
 
   return (
     <div className="flex flex-col gap-6">
@@ -137,7 +156,7 @@ export function ArticleFeed({ initialArticles }: ArticleFeedProps) {
             </div>
           )}
 
-          {articles.length === 0 && (
+          {allArticles.length === 0 && (
             <div className="flex flex-col items-center justify-center py-28 text-center gap-4">
               <div className="w-14 h-14 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center">
                 <Search size={22} className="text-zinc-500" />
