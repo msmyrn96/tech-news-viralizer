@@ -35,7 +35,14 @@ export function ArticleFeed({ initialArticles }: ArticleFeedProps) {
       staleTime: 30_000,
     })
 
-  const allArticles = data?.pages.flat() ?? initialArticles
+  const allArticles = useMemo(() => {
+    const seen = new Set<number>()
+    return (data?.pages.flat() ?? initialArticles).filter(({ id }) => {
+      if (seen.has(id)) return false
+      seen.add(id)
+      return true
+    })
+  }, [data, initialArticles])
   const [featured, ...rest] = allArticles
 
   const sentinelRef = useRef<HTMLDivElement>(null)
