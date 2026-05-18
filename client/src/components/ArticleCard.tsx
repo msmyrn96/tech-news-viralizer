@@ -31,8 +31,8 @@ export function ArticleCard({
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{
-        duration: 0.38,
-        delay: Math.min(index * 0.07, 0.5),
+        duration: 0.35,
+        delay: Math.min(index * 0.04, 0.28),
         ease: [0.16, 1, 0.3, 1],
       }}
       whileHover={{
