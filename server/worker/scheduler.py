@@ -11,14 +11,18 @@ DRIP_BATCH = 10
 
 
 def map_to_article(source: str, entry: FeedEntry) -> Article:
-    content_html = entry.get('content', [{}])[0].get('value') if 'content' in entry else None
+    image_url = None
+    for block in entry.get('content', []):
+        image_url = extract_image_src(block.get('value'))
+        if image_url:
+            break
     return Article(
         title=entry.get('title', ''),
         source=source,
         url=entry.get('link', ''),
         summary=entry.get('summary'),
         published_at=entry.get('published'),
-        image_url=extract_image_src(content_html),
+        image_url=image_url,
     )
 
 
