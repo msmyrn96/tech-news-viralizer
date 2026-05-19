@@ -4,6 +4,17 @@ from typing import Optional, TypedDict, NotRequired
 from time import struct_time
 from pydantic import BaseModel, field_validator
 
+class MediaContent(TypedDict):
+    url: str
+    type: Optional[str]
+    width: Optional[int]
+    height: Optional[int]
+    medium: Optional[str]
+
+class MediaThumbnail(TypedDict):
+    url: str
+    width: Optional[int]
+    height: Optional[int]
 
 class Detail(TypedDict):
     value: str
@@ -28,6 +39,8 @@ class FeedEntry(TypedDict):
     published_parsed: struct_time
     summary: str
     summary_detail: Detail
+    media_thumbnail: NotRequired[list[MediaThumbnail]]
+    media_content: NotRequired[list[MediaContent]]
 
 
 class ViralScore(BaseModel):

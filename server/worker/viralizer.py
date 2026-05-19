@@ -23,7 +23,8 @@ def check_virality(article: Article) -> None:
                     "Given an article's title, source and summary, rate how breaking news it could become "
                     "on a scale of 0-100. Consider: headline impact, controversy, novelty, "
                     "emotional resonance, and shareability. "
-                    "Return a score, a one-sentence reason, and up to 3 short tags."
+                    "Return a score, a one-sentence reason, and up to 3 short tags. Lets make the tags concise and catchy, like what you would use on Twitter."
+                    "Avoid generic tags like 'tech' or 'news'. Try to use one word tags that capture the essence of why the article is viral or not."
                     "The reason should be concise and explain the main factor influencing the score."
                     "Make the reason like you comment as a tech news editor writing for a global audience, using clear and engaging language."
                 ),

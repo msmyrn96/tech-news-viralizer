@@ -1,3 +1,4 @@
+import json
 import re
 import feedparser
 from shared.models import FeedEntry
@@ -11,13 +12,16 @@ def extract_image_src(html: str | None) -> str | None:
 
 
 FEEDS = [
+    #No image
     ('https://techcrunch.com/feed/', 'TechCrunch'),
+    #No image
     ('https://news.ycombinator.com/rss', 'Hacker News'),
     ('https://www.theverge.com/rss/index.xml', 'The Verge'),
     ('https://www.wired.com/feed/rss', 'Wired'),
     ('https://www.cnet.com/rss/news/', 'CNET'),
     ('https://www.engadget.com/rss.xml', 'Engadget'),
     ('https://www.gizmodo.com/rss', 'Gizmodo'),
+    #No image
     ('https://www.zdnet.com/news/rss.xml', 'ZDNet'),
     ('https://www.arstechnica.com/feed/', 'Ars Technica'),
     ('https://www.theatlantic.com/feed/all/', 'The Atlantic'),

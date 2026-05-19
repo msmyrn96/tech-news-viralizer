@@ -16,6 +16,22 @@ def map_to_article(source: str, entry: FeedEntry) -> Article:
         image_url = extract_image_src(block.get('value'))
         if image_url:
             break
+    
+    if image_url is None:
+        image_url = entry.get('media_thumbnail', [{}])[0].get('url')
+
+    if image_url is None:
+        image_url = next(
+            (l.get('href') for l in entry.get('links', [])
+             if l.get('rel') == 'enclosure' and (l.get('type') or '').startswith('image/')),
+            None
+        )
+
+    if image_url is None:
+        mc = entry.get('media_content', [{}])[0]
+        if (mc.get('type') or '').startswith('image/') or mc.get('medium') == 'image':
+            image_url = mc.get('url')
+    
     return Article(
         title=entry.get('title', ''),
         source=source,
