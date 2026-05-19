@@ -155,7 +155,10 @@ export function ArticleFeed({ initialArticles }: ArticleFeedProps) {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="rounded-2xl bg-zinc-900 border border-zinc-800 overflow-hidden">
+              <div
+                key={i}
+                className="rounded-2xl bg-zinc-900 border border-zinc-800 overflow-hidden"
+              >
                 <div className="skeleton-shimmer aspect-video" />
                 <div className="p-5 flex flex-col gap-3">
                   <div className="skeleton-shimmer h-3 rounded w-1/3" />
@@ -177,12 +180,19 @@ export function ArticleFeed({ initialArticles }: ArticleFeedProps) {
           {rest.length > 0 && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {rest.map((article, i) => (
-                <ArticleCard key={article.id} article={article} index={i % 20} />
+                <ArticleCard
+                  key={article.id}
+                  article={article}
+                  index={i % 20}
+                />
               ))}
               {isFetchingNextPage && (
                 <>
                   {Array.from({ length: 6 }).map((_, i) => (
-                    <div key={i + "sk"} className="rounded-2xl bg-zinc-900 border border-zinc-800 overflow-hidden">
+                    <div
+                      key={i + "sk"}
+                      className="rounded-2xl bg-zinc-900 border border-zinc-800 overflow-hidden"
+                    >
                       <div className="skeleton-shimmer aspect-video" />
                       <div className="p-5 flex flex-col gap-3">
                         <div className="skeleton-shimmer h-3 rounded w-1/3" />
@@ -203,9 +213,12 @@ export function ArticleFeed({ initialArticles }: ArticleFeedProps) {
                 <Search size={22} className="text-zinc-500" />
               </div>
               <div>
-                <p className="text-zinc-400 font-medium text-sm">No articles yet</p>
+                <p className="text-zinc-400 font-medium text-sm">
+                  No articles yet
+                </p>
                 <p className="text-zinc-500 text-xs mt-1 max-w-xs leading-relaxed">
-                  Articles will appear once the scraper runs. Check back in a moment.
+                  Articles will appear once the scraper runs. Check back in a
+                  moment.
                 </p>
               </div>
             </div>
@@ -217,7 +230,9 @@ export function ArticleFeed({ initialArticles }: ArticleFeedProps) {
       {!hasNextPage && allArticles.length > 0 && !isLoading && (
         <div className="flex items-center gap-4 py-8">
           <div className="flex-1 h-px bg-zinc-800" />
-          <span className="text-zinc-600 font-mono text-[10px] uppercase tracking-[0.15em]">all caught up</span>
+          <span className="text-zinc-600 font-mono text-[10px] uppercase tracking-[0.15em]">
+            all caught up
+          </span>
           <div className="flex-1 h-px bg-zinc-800" />
         </div>
       )}
