@@ -131,3 +131,9 @@ def delete_all_articles() -> int:
         with conn.cursor() as cur:
             cur.execute("DELETE FROM articles")
             return cur.rowcount
+
+def fetch_sources() -> list[str]:
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute("SELECT DISTINCT source FROM articles")
+            return [row[0] for row in cur.fetchall()]

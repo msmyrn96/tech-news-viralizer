@@ -37,3 +37,8 @@ async def get_articles(
 @app.get("/articles/{article_id}", response_model=Article)
 async def get_article(article_id: int):
     return fetch_single_article(article_id)
+
+@app.get("/sources", response_model=list[str])
+async def get_sources():
+    from shared.database import fetch_sources
+    return fetch_sources()

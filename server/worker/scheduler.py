@@ -12,6 +12,8 @@ DRIP_BATCH = 10
 
 def map_to_article(source: str, entry: FeedEntry) -> Article:
     image_url = None
+    read_time_seconds = None
+    
     for block in entry.get('content', []):
         image_url = extract_image_src(block.get('value'))
         if image_url:
@@ -31,7 +33,10 @@ def map_to_article(source: str, entry: FeedEntry) -> Article:
         mc = entry.get('media_content', [{}])[0]
         if (mc.get('type') or '').startswith('image/') or mc.get('medium') == 'image':
             image_url = mc.get('url')
-    
+            
+    if source != 'Hacker News':
+        read_time_seconds = round(len(entry.get('summary', '').split()) / (200 * 60)) #200 wpm reading speed
+
     return Article(
         title=entry.get('title', ''),
         source=source,
@@ -39,6 +44,7 @@ def map_to_article(source: str, entry: FeedEntry) -> Article:
         summary=entry.get('summary'),
         published_at=entry.get('published'),
         image_url=image_url,
+        read_time_seconds=read_time_seconds,
     )
 
 
