@@ -1,10 +1,10 @@
 "use client"
 
 import { useState, useMemo, useRef, useEffect } from "react"
-import { useInfiniteQuery } from "@tanstack/react-query"
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import { Flame, Calendar, Search } from "lucide-react"
 import type { Article, SortBy } from "@/lib/types"
-import { fetchArticles } from "@/lib/api"
+import { fetchArticles, fetchSources } from "@/lib/api"
 import { ArticleCard } from "./ArticleCard"
 
 interface ArticleFeedProps {
@@ -72,16 +72,10 @@ export function ArticleFeed({ initialArticles }: ArticleFeedProps) {
     return () => observer.disconnect()
   }, [fetchNextPage, isFetchingNextPage, hasNextPage])
 
-  const sources = useMemo(() => {
-    const seen = new Set<string>()
-    return initialArticles
-      .map((a) => a.source)
-      .filter((s) => {
-        if (seen.has(s)) return false
-        seen.add(s)
-        return true
-      })
-  }, [initialArticles])
+  const { data: sources } = useQuery({
+    queryKey: ["sources"],
+    queryFn: fetchSources,
+  })
 
   return (
     <div className="flex flex-col gap-6">
@@ -98,7 +92,7 @@ export function ArticleFeed({ initialArticles }: ArticleFeedProps) {
           >
             All
           </button>
-          {sources.map((source) => (
+          {(sources ?? []).map((source) => (
             <button
               key={source}
               onClick={() =>
@@ -175,16 +169,12 @@ export function ArticleFeed({ initialArticles }: ArticleFeedProps) {
       {/* Articles */}
       {!isLoading && (
         <div className="animate-fade-in flex flex-col gap-6">
-          {featured && <ArticleCard article={featured} featured index={0} />}
+          {featured && <ArticleCard article={featured} featured />}
 
           {rest.length > 0 && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {rest.map((article, i) => (
-                <ArticleCard
-                  key={article.id}
-                  article={article}
-                  index={i % 20}
-                />
+              {rest.map((article) => (
+                <ArticleCard key={article.id} article={article} />
               ))}
               {isFetchingNextPage && (
                 <>

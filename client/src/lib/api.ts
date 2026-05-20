@@ -2,7 +2,7 @@ import axios from "axios"
 import type { Article, SortBy } from "./types"
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL ?? "http://0.0.0.0:8000",
+  baseURL: "http://0.0.0.0:8000",
 })
 
 export interface FetchParams {
@@ -23,5 +23,10 @@ export async function fetchArticles(
       ...(params.page && params.page > 1 && { page: params.page }),
     },
   })
+  return data
+}
+
+export async function fetchSources(): Promise<string[]> {
+  const { data } = await api.get<string[]>("/sources")
   return data
 }

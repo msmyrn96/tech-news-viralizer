@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { motion, useReducedMotion } from "framer-motion"
 import { Clock, ArrowUpRight, Activity } from "lucide-react"
 import type { Article } from "@/lib/types"
@@ -10,15 +11,14 @@ import { readTime, relativeTime } from "@/lib/helpers"
 interface ArticleCardProps {
   article?: Article
   featured?: boolean
-  index?: number
 }
 
 export function ArticleCard({
   article,
   featured = false,
-  index = 0,
 }: ArticleCardProps) {
   const shouldReduceMotion = useReducedMotion()
+  const [imgLoaded, setImgLoaded] = useState(false)
   const { score, tags, reason } = article?.virality_view || {}
   const time = relativeTime(article?.published_at ?? undefined)
   const rt = readTime(article?.read_time_seconds ?? undefined)
@@ -29,11 +29,11 @@ export function ArticleCard({
       href={article?.url}
       target="_blank"
       rel="noopener noreferrer"
-      initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 14 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 10 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "0px 0px -40px 0px" }}
       transition={{
-        duration: 0.32,
-        delay: Math.min(index * 0.04, 0.28),
+        duration: 0.28,
         ease: [0.16, 1, 0.3, 1],
       }}
       whileHover={{
@@ -53,12 +53,18 @@ export function ArticleCard({
         }`}
       >
         {image ? (
-          /* eslint-disable-next-line @next/next/no-img-element */
-          <img
-            src={image}
-            alt=""
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
-          />
+          <>
+            <div className={`absolute inset-0 skeleton-shimmer transition-opacity duration-500 ${imgLoaded ? "opacity-0" : "opacity-100"}`} />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={image}
+              alt=""
+              loading={featured ? "eager" : "lazy"}
+              decoding="async"
+              onLoad={() => setImgLoaded(true)}
+              className={`absolute inset-0 w-full h-full object-cover transition-[transform,opacity] duration-500 ease-out group-hover:scale-[1.03] ${imgLoaded ? "opacity-100" : "opacity-0"}`}
+            />
+          </>
         ) : (
           <div className="absolute inset-0 w-full h-full bg-zinc-800 flex items-center justify-center">
             <div className="w-50 h-50 rounded-lg bg-amber-400 flex items-center justify-center flex-shrink-0">
