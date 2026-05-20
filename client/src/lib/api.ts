@@ -2,7 +2,7 @@ import axios from "axios"
 import type { Article, SortBy } from "./types"
 
 const api = axios.create({
-  baseURL: "http://0.0.0.0:8000",
+  baseURL: process.env.NEXT_PUBLIC_API_URL ?? "http://0.0.0.0:8000",
 })
 
 export interface FetchParams {

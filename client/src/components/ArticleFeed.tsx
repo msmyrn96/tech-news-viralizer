@@ -72,7 +72,7 @@ export function ArticleFeed({ initialArticles }: ArticleFeedProps) {
     return () => observer.disconnect()
   }, [fetchNextPage, isFetchingNextPage, hasNextPage])
 
-  const { data: sources } = useQuery({
+  const { data: sources, isLoading: isLoadingSources } = useQuery({
     queryKey: ["sources"],
     queryFn: fetchSources,
   })
@@ -92,21 +92,29 @@ export function ArticleFeed({ initialArticles }: ArticleFeedProps) {
           >
             All
           </button>
-          {(sources ?? []).map((source) => (
-            <button
-              key={source}
-              onClick={() =>
-                setActiveSource(source === activeSource ? null : source)
-              }
-              className={`px-3 py-1.5 rounded-full text-[11px] font-mono uppercase tracking-[0.1em] transition-all duration-150 active:scale-[0.97] ${
-                activeSource === source
-                  ? "bg-amber-400 text-zinc-950 font-semibold"
-                  : "bg-zinc-800 text-zinc-400 font-medium hover:bg-zinc-700 hover:text-zinc-200"
-              }`}
-            >
-              {source}
-            </button>
-          ))}
+          {isLoadingSources
+            ? [16, 20, 14, 22, 18].map((w, i) => (
+                <div
+                  key={i}
+                  className="skeleton-shimmer rounded-full h-7"
+                  style={{ width: `${w * 4}px` }}
+                />
+              ))
+            : (sources ?? []).map((source) => (
+                <button
+                  key={source}
+                  onClick={() =>
+                    setActiveSource(source === activeSource ? null : source)
+                  }
+                  className={`px-3 py-1.5 rounded-full text-[11px] font-mono uppercase tracking-[0.1em] transition-all duration-150 active:scale-[0.97] ${
+                    activeSource === source
+                      ? "bg-amber-400 text-zinc-950 font-semibold"
+                      : "bg-zinc-800 text-zinc-400 font-medium hover:bg-zinc-700 hover:text-zinc-200"
+                  }`}
+                >
+                  {source}
+                </button>
+              ))}
         </div>
 
         <div className="flex items-center gap-1 bg-zinc-800/80 rounded-full p-1 border border-zinc-700/50">
