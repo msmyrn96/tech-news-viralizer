@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { motion, useReducedMotion } from "framer-motion"
-import { Clock, ArrowUpRight, Activity } from "lucide-react"
+import { Clock, ArrowUpRight } from "lucide-react"
 import type { Article } from "@/lib/types"
 import { ViralityBadge } from "./ViralityBadge"
 import { ViralityReason } from "./ViralityReason"
@@ -90,14 +90,14 @@ export function ArticleCard({ article, featured = false }: ArticleCardProps) {
 
         {reason && <ViralityReason reason={reason} />}
 
-        <div className="mt-auto pt-2 flex items-center justify-between gap-2 flex-wrap">
+        <div className="mt-auto pt-2 flex items-center justify-between gap-2">
           <div className="flex items-center gap-1.5 flex-wrap">
             {tags?.slice(0, featured ? 4 : 3).map((tag) => (
               <span
                 key={tag}
-                className="text-[10px] font-mono text-zinc-500 bg-zinc-800 px-2 py-0.5 rounded"
+                className="text-[12px] font-mono text-zinc-500 bg-zinc-800 px-2 py-0.5 rounded"
               >
-                {tag}
+                #{tag}
               </span>
             ))}
           </div>

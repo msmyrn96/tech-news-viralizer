@@ -1,17 +1,12 @@
-import { fetchArticles } from "@/lib/api"
 import { Nav } from "@/components/Nav"
 import { ArticleFeed } from "@/components/ArticleFeed"
 
 export const revalidate = 30
 
 export default async function Home() {
-  const articles = await fetchArticles({ sort_by: "score", limit: 20 }).catch(
-    () => [],
-  )
-
   return (
     <>
-      <Nav articleCount={articles.length} />
+      <Nav />
       <main className="max-w-7xl mx-auto w-full px-4 sm:px-6 py-8">
         <div className="mb-8">
           <p className="text-[11px] font-mono text-zinc-600 uppercase tracking-[0.1em] mb-2">
@@ -29,7 +24,7 @@ export default async function Home() {
           </h1>
         </div>
 
-        <ArticleFeed initialArticles={articles} />
+        <ArticleFeed />
       </main>
     </>
   )

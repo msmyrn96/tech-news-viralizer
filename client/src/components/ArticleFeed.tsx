@@ -3,15 +3,11 @@
 import { useState, useMemo, useRef, useEffect } from "react"
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import { Flame, Calendar, Search } from "lucide-react"
-import type { Article, SortBy } from "@/lib/types"
+import type { SortBy } from "@/lib/types"
 import { fetchArticles, fetchSources } from "@/lib/api"
 import { ArticleCard } from "./ArticleCard"
 
-interface ArticleFeedProps {
-  initialArticles: Article[]
-}
-
-export function ArticleFeed({ initialArticles }: ArticleFeedProps) {
+export function ArticleFeed() {
   const [sortBy, setSortBy] = useState<SortBy>("score")
   const [activeSource, setActiveSource] = useState<string | null>(null)
 
@@ -28,21 +24,19 @@ export function ArticleFeed({ initialArticles }: ArticleFeedProps) {
       initialPageParam: 1,
       getNextPageParam: (lastPage, _allPages, lastPageParam) =>
         lastPage.length === 20 ? lastPageParam + 1 : undefined,
-      initialData:
-        sortBy === "score" && activeSource === null
-          ? { pages: [initialArticles], pageParams: [1] }
-          : undefined,
       staleTime: 30_000,
     })
 
   const allArticles = useMemo(() => {
     const seen = new Set<number>()
-    return (data?.pages.flat() ?? initialArticles).filter(({ id }) => {
-      if (seen.has(id)) return false
-      seen.add(id)
-      return true
-    })
-  }, [data, initialArticles])
+    return (
+      data?.pages.flat().filter(({ id }) => {
+        if (seen.has(id)) return false
+        seen.add(id)
+        return true
+      }) ?? []
+    )
+  }, [data])
   const [featured, ...rest] = allArticles
 
   const sentinelRef = useRef<HTMLDivElement>(null)
