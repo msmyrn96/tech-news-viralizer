@@ -59,6 +59,8 @@ def fetch_articles(
     sort_by: str = "score",
     limit: int = 20,
     page: int = 1,
+    min_score: int | None = None,
+    q: str | None = None,
 ) -> list[Article]:
     with get_connection() as conn:
         with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
@@ -67,6 +69,13 @@ def fetch_articles(
             if source is not None:
                 conditions.append("source = %s")
                 params.append(source)
+            if min_score is not None:
+                conditions.append("(virality_view->>'score')::integer >= %s")
+                params.append(min_score)
+            if q is not None:
+                conditions.append("(title ILIKE %s OR summary ILIKE %s OR (virality_view->>'reason')::varchar ILIKE %s)")
+                like = f"%{q}%"
+                params.extend([like, like, like])
             query = "SELECT * FROM articles"
             if conditions:
                 query += " WHERE " + " AND ".join(conditions)

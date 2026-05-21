@@ -30,8 +30,10 @@ async def get_articles(
     sort_by: SortBy = SortBy.score,
     limit: int = Query(default=20, ge=1, le=100),
     page: int = Query(default=1, ge=1),
+    min_score: int | None = Query(default=None, ge=0, le=100),
+    q: str | None = Query(default=None, min_length=1, max_length=200),
 ):
-    return fetch_articles(source=source, sort_by=sort_by.value, limit=limit, page=page)
+    return fetch_articles(source=source, sort_by=sort_by.value, limit=limit, page=page, min_score=min_score, q=q)
 
 
 @app.get("/articles/{article_id}", response_model=Article)
