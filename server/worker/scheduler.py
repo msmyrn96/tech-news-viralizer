@@ -38,7 +38,7 @@ def map_to_article(source: str, entry: FeedEntry) -> Article:
             image_url = mc.get('url')
             
     if source != 'Hacker News':
-        read_time_seconds = round(len(entry.get('summary', '').split()) / (200 * 60)) #200 wpm reading speed
+        read_time_seconds = round((len(entry.get('summary', '').split()) / 200) * 60) #200 wpm reading speed
 
     return Article(
         title=entry.get('title', ''),
