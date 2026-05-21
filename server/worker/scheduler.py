@@ -20,6 +20,9 @@ def map_to_article(source: str, entry: FeedEntry) -> Article:
             break
     
     if image_url is None:
+        image_url = entry.get('media_content', [{}])[0].get('url')
+    
+    if image_url is None:
         image_url = entry.get('media_thumbnail', [{}])[0].get('url')
 
     if image_url is None:
