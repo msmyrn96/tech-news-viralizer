@@ -32,3 +32,9 @@ export function stripHtml(html: string): string {
     .replace(/&[a-z]+;/gi, "")
     .trim()
 }
+
+export const sourceImageMapper: Record<string, string> = {
+  TechCrunch: "/images/techcrunch.png",
+  "Hacker News": "/images/hackernews.jpg",
+  ZDNet: "/images/zdnet.jpg",
+}

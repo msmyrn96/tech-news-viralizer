@@ -6,23 +6,21 @@ import { Clock, ArrowUpRight, Activity } from "lucide-react"
 import type { Article } from "@/lib/types"
 import { ViralityBadge } from "./ViralityBadge"
 import { ViralityReason } from "./ViralityReason"
-import { readTime, relativeTime } from "@/lib/helpers"
+import { readTime, relativeTime, sourceImageMapper } from "@/lib/helpers"
 
 interface ArticleCardProps {
   article?: Article
   featured?: boolean
 }
 
-export function ArticleCard({
-  article,
-  featured = false,
-}: ArticleCardProps) {
+export function ArticleCard({ article, featured = false }: ArticleCardProps) {
   const shouldReduceMotion = useReducedMotion()
   const [imgLoaded, setImgLoaded] = useState(false)
   const { score, tags, reason } = article?.virality_view || {}
   const time = relativeTime(article?.published_at ?? undefined)
   const rt = readTime(article?.read_time_seconds ?? undefined)
-  const image = article?.image_url
+  const sourceImage = article?.source ? sourceImageMapper[article.source] : null
+  const image = article?.image_url ?? sourceImage ?? "/images/placeholder.png"
 
   return (
     <motion.a
@@ -52,26 +50,21 @@ export function ArticleCard({
             : "aspect-video w-full"
         }`}
       >
-        {image ? (
-          <>
-            <div className={`absolute inset-0 skeleton-shimmer transition-opacity duration-500 ${imgLoaded ? "opacity-0" : "opacity-100"}`} />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={image}
-              alt=""
-              loading={featured ? "eager" : "lazy"}
-              decoding="async"
-              onLoad={() => setImgLoaded(true)}
-              className={`absolute inset-0 w-full h-full object-cover transition-[transform,opacity] duration-500 ease-out group-hover:scale-[1.03] ${imgLoaded ? "opacity-100" : "opacity-0"}`}
-            />
-          </>
-        ) : (
-          <div className="absolute inset-0 w-full h-full bg-zinc-800 flex items-center justify-center">
-            <div className="w-50 h-50 rounded-lg bg-amber-400 flex items-center justify-center flex-shrink-0">
-              <Activity size={50} className="text-zinc-950" />
-            </div>
-          </div>
-        )}
+        <>
+          <div
+            className={`absolute inset-0 skeleton-shimmer transition-opacity duration-500 ${imgLoaded ? "opacity-0" : "opacity-100"}`}
+          />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={image}
+            alt={article?.title ?? "Article image"}
+            loading={featured ? "eager" : "lazy"}
+            decoding="async"
+            onLoad={() => setImgLoaded(true)}
+            className={`absolute inset-0 w-full h-full object-cover transition-[transform,opacity] duration-500 ease-out group-hover:scale-[1.03] ${imgLoaded ? "opacity-100" : "opacity-0"}`}
+          />
+        </>
+
         <div className="absolute inset-0 bg-gradient-to-t from-zinc-900/60 via-zinc-900/20 to-transparent transition-opacity duration-300 group-hover:opacity-60" />
       </div>
 
