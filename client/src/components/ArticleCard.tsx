@@ -18,7 +18,7 @@ export function ArticleCard({ article, featured = false }: ArticleCardProps) {
   const [imgLoaded, setImgLoaded] = useState(false)
   const { score, tags, reason } = article?.virality_view || {}
   const time = relativeTime(article?.published_at ?? undefined)
-  const rt = readTime(article?.read_time_seconds ?? undefined)
+  const rt = readTime(article?.read_time_seconds ?? undefined) ?? 10
   const sourceImage = article?.source ? sourceImageMapper[article.source] : null
   const image = article?.image_url ?? sourceImage ?? "/images/placeholder.png"
 
@@ -73,11 +73,20 @@ export function ArticleCard({ article, featured = false }: ArticleCardProps) {
           featured && article?.image_url ? "md:py-7 md:px-7 justify-center" : ""
         } ${featured && !article?.image_url ? "md:py-8 md:px-7" : ""}`}
       >
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-[10px] font-mono font-medium text-zinc-500 uppercase tracking-[0.1em] transition-colors duration-200 group-hover:text-zinc-300">
-            {article?.source}
-          </span>
-          {score !== undefined && <ViralityBadge score={score} />}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-[10px] font-mono font-medium text-zinc-500 uppercase tracking-[0.1em] transition-colors duration-200 group-hover:text-zinc-300">
+              {article?.source}
+            </span>
+            {score !== undefined && <ViralityBadge score={score} />}
+          </div>
+
+          {rt && (
+            <span className="flex items-center gap-2 text-[12px] text-zinc-600 font-mono tabular-nums">
+              <Clock size={11} />
+              {rt}
+            </span>
+          )}
         </div>
 
         <h2
@@ -103,12 +112,6 @@ export function ArticleCard({ article, featured = false }: ArticleCardProps) {
           </div>
 
           <div className="flex items-center gap-2.5 text-[11px] text-zinc-600 font-mono tabular-nums flex-shrink-0">
-            {rt && (
-              <span className="flex items-center gap-1">
-                <Clock size={11} />
-                {rt}
-              </span>
-            )}
             {time && <span suppressHydrationWarning>{time}</span>}
             <ArrowUpRight
               size={13}

@@ -10,6 +10,8 @@ export interface FetchParams {
   sort_by?: SortBy
   limit?: number
   page?: number
+  min_score?: number
+  q?: string
 }
 
 export async function fetchArticles(
@@ -21,6 +23,8 @@ export async function fetchArticles(
       ...(params.sort_by && { sort_by: params.sort_by }),
       limit: params.limit ?? 20,
       ...(params.page && params.page > 1 && { page: params.page }),
+      ...(params.min_score !== undefined && { min_score: params.min_score }),
+      ...(params.q && { q: params.q }),
     },
   })
   return data

@@ -2,24 +2,46 @@
 
 import { useState, useMemo, useRef, useEffect } from "react"
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
-import { Flame, Calendar, Search } from "lucide-react"
+import { Flame, Calendar, Search, TrendingUp, Zap, X } from "lucide-react"
+import type { LucideIcon } from "lucide-react"
 import type { SortBy } from "@/lib/types"
 import { fetchArticles, fetchSources } from "@/lib/api"
 import { ArticleCard } from "./ArticleCard"
 
+const SCORE_BUCKETS: {
+  label: string
+  min: number | null
+  Icon: LucideIcon | null
+}[] = [
+  { label: "All", min: null, Icon: null },
+  { label: "Rising", min: 50, Icon: TrendingUp },
+  { label: "Hot", min: 70, Icon: Flame },
+  { label: "Viral", min: 90, Icon: Zap },
+]
+
 export function ArticleFeed() {
   const [sortBy, setSortBy] = useState<SortBy>("score")
   const [activeSource, setActiveSource] = useState<string | null>(null)
+  const [minScore, setMinScore] = useState<number | null>(null)
+  const [searchInput, setSearchInput] = useState("")
+  const [debouncedQ, setDebouncedQ] = useState("")
+
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedQ(searchInput.trim()), 300)
+    return () => clearTimeout(t)
+  }, [searchInput])
 
   const { data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage } =
     useInfiniteQuery({
-      queryKey: ["articles", sortBy, activeSource],
+      queryKey: ["articles", sortBy, activeSource, minScore, debouncedQ],
       queryFn: ({ pageParam }) =>
         fetchArticles({
           sort_by: sortBy,
           source: activeSource ?? undefined,
           limit: 20,
           page: pageParam,
+          ...(minScore !== null && { min_score: minScore }),
+          ...(debouncedQ && { q: debouncedQ }),
         }),
       initialPageParam: 1,
       getNextPageParam: (lastPage, _allPages, lastPageParam) =>
@@ -74,66 +96,130 @@ export function ArticleFeed() {
   return (
     <div className="flex flex-col gap-6">
       {/* Filter bar */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-5 border-b border-zinc-800">
-        <div className="flex items-center gap-2 flex-wrap">
-          <button
-            onClick={() => setActiveSource(null)}
-            className={`px-3 py-1.5 rounded-full text-[11px] font-mono uppercase tracking-[0.1em] transition-all duration-150 active:scale-[0.97] ${
-              activeSource === null
-                ? "bg-amber-400 text-zinc-950 font-semibold"
-                : "bg-zinc-800 text-zinc-400 font-medium hover:bg-zinc-700 hover:text-zinc-200"
-            }`}
-          >
-            All
-          </button>
-          {isLoadingSources
-            ? [16, 20, 14, 22, 18].map((w, i) => (
-                <div
-                  key={i}
-                  className="skeleton-shimmer rounded-full h-7"
-                  style={{ width: `${w * 4}px` }}
-                />
-              ))
-            : (sources ?? []).map((source) => (
+      <div className="flex flex-col border-b border-zinc-800 pb-3">
+        {/* Row 2: sources */}
+        <div className="py-3">
+          <div className="w-16 flex-shrink-0 text-right text-[12px] font-mono text-zinc-500 uppercase tracking-[0.12em] mb-2">
+            sources
+          </div>
+          <div className="flex items-center gap-2 flex-wrap max-w-2xl">
+            <button
+              onClick={() => setActiveSource(null)}
+              className={`px-3 py-1.5 rounded-full text-[11px] font-mono uppercase tracking-[0.1em] transition-all duration-150 active:scale-[0.97] cursor-pointer ${
+                activeSource === null
+                  ? "bg-amber-400 text-zinc-950 font-semibold"
+                  : "bg-zinc-800 text-zinc-400 font-medium hover:bg-zinc-700 hover:text-zinc-200"
+              }`}
+            >
+              All
+            </button>
+            {isLoadingSources
+              ? [16, 20, 14, 22, 18].map((w, i) => (
+                  <div
+                    key={i}
+                    className="skeleton-shimmer rounded-full h-7"
+                    style={{ width: `${w * 4}px` }}
+                  />
+                ))
+              : (sources ?? []).map((source) => (
+                  <button
+                    key={source}
+                    onClick={() =>
+                      setActiveSource(source === activeSource ? null : source)
+                    }
+                    className={`px-3 py-1.5 rounded-full text-[11px] font-mono uppercase tracking-[0.1em] transition-all duration-150 active:scale-[0.97] cursor-pointer ${
+                      activeSource === source
+                        ? "bg-amber-400 text-zinc-950 font-semibold"
+                        : "bg-zinc-800 text-zinc-400 font-medium hover:bg-zinc-700 hover:text-zinc-200"
+                    }`}
+                  >
+                    {source}
+                  </button>
+                ))}
+          </div>
+        </div>
+
+        {/* Row 3: virality */}
+        <div className="py-3">
+          <div className="w-16 flex-shrink-0 text-right text-[12px] font-mono text-zinc-500 uppercase tracking-[0.12em] mb-2">
+            virality
+          </div>
+          <div className="flex items-center gap-2 flex-wrap flex-1">
+            {SCORE_BUCKETS.map(({ label, min, Icon }) => {
+              const isActive = minScore === min
+              return (
                 <button
-                  key={source}
-                  onClick={() =>
-                    setActiveSource(source === activeSource ? null : source)
-                  }
-                  className={`px-3 py-1.5 rounded-full text-[11px] font-mono uppercase tracking-[0.1em] transition-all duration-150 active:scale-[0.97] ${
-                    activeSource === source
+                  key={label}
+                  onClick={() => setMinScore(min)}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-mono uppercase tracking-[0.1em] transition-all duration-150 active:scale-[0.97] cursor-pointer ${
+                    isActive
                       ? "bg-amber-400 text-zinc-950 font-semibold"
                       : "bg-zinc-800 text-zinc-400 font-medium hover:bg-zinc-700 hover:text-zinc-200"
                   }`}
                 >
-                  {source}
+                  {Icon && <Icon size={10} />}
+                  {label}
+                  {min !== null && (
+                    <span className={isActive ? "opacity-60" : "opacity-40"}>
+                      {min}+
+                    </span>
+                  )}
                 </button>
-              ))}
+              )
+            })}
+          </div>
         </div>
 
-        <div className="flex items-center gap-1 bg-zinc-800/80 rounded-full p-1 border border-zinc-700/50">
-          <button
-            onClick={() => setSortBy("score")}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-mono uppercase tracking-[0.1em] transition-all duration-150 ${
-              sortBy === "score"
-                ? "bg-zinc-700 text-amber-400 font-semibold shadow-[0_1px_2px_rgba(0,0,0,0.3)]"
-                : "text-zinc-500 font-medium hover:text-zinc-200"
-            }`}
-          >
-            <Flame size={11} />
-            Top
-          </button>
-          <button
-            onClick={() => setSortBy("published_at")}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-mono uppercase tracking-[0.1em] transition-all duration-150 ${
-              sortBy === "published_at"
-                ? "bg-zinc-700 text-amber-400 font-semibold shadow-[0_1px_2px_rgba(0,0,0,0.3)]"
-                : "text-zinc-500 font-medium hover:text-zinc-200"
-            }`}
-          >
-            <Calendar size={11} />
-            Latest
-          </button>
+        {/* Row 1: search + sort */}
+        <div className="flex items-center gap-3 py-3 justify-between">
+          <div className="relative w-2xl">
+            <Search
+              size={13}
+              className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500 pointer-events-none"
+            />
+            <input
+              type="text"
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              placeholder="Search articles..."
+              aria-label="Search articles"
+              autoComplete="off"
+              className="w-full bg-zinc-800/60 border border-zinc-700/50 rounded-xl pl-9 pr-9 py-3 text-[13px] text-zinc-200 placeholder:text-zinc-600 font-mono focus:outline-none focus:border-amber-400/40 focus:bg-zinc-800 transition-colors duration-150"
+            />
+            {searchInput && (
+              <button
+                onClick={() => setSearchInput("")}
+                aria-label="Clear search"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300 transition-colors duration-150 cursor-pointer"
+              >
+                <X size={13} />
+              </button>
+            )}
+          </div>
+          <div className="flex items-center gap-1 bg-zinc-800/80 rounded-full p-1 border border-zinc-700/50 flex-shrink-0">
+            <button
+              onClick={() => setSortBy("score")}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-mono uppercase tracking-[0.1em] transition-all duration-150 cursor-pointer ${
+                sortBy === "score"
+                  ? "bg-zinc-700 text-amber-400 font-semibold shadow-[0_1px_2px_rgba(0,0,0,0.3)]"
+                  : "text-zinc-500 font-medium hover:text-zinc-200"
+              }`}
+            >
+              <Flame size={11} />
+              Top
+            </button>
+            <button
+              onClick={() => setSortBy("published_at")}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-mono uppercase tracking-[0.1em] transition-all duration-150 cursor-pointer ${
+                sortBy === "published_at"
+                  ? "bg-zinc-700 text-amber-400 font-semibold shadow-[0_1px_2px_rgba(0,0,0,0.3)]"
+                  : "text-zinc-500 font-medium hover:text-zinc-200"
+              }`}
+            >
+              <Calendar size={11} />
+              Latest
+            </button>
+          </div>
         </div>
       </div>
 
@@ -206,11 +292,12 @@ export function ArticleFeed() {
               </div>
               <div>
                 <p className="text-zinc-400 font-medium text-sm">
-                  No articles yet
+                  No articles found
                 </p>
                 <p className="text-zinc-500 text-xs mt-1 max-w-xs leading-relaxed">
-                  Articles will appear once the scraper runs. Check back in a
-                  moment.
+                  {debouncedQ
+                    ? `No results for "${debouncedQ}". Try different keywords or adjust the filters.`
+                    : "Try a lower virality threshold or a different source."}
                 </p>
               </div>
             </div>
