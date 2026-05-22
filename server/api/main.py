@@ -32,8 +32,9 @@ async def get_articles(
     page: int = Query(default=1, ge=1),
     min_score: int | None = Query(default=None, ge=0, le=100),
     q: str | None = Query(default=None, min_length=1, max_length=200),
+    tag: str | None = Query(default=None, min_length=1, max_length=100),
 ):
-    return fetch_articles(source=source, sort_by=sort_by.value, limit=limit, page=page, min_score=min_score, q=q)
+    return fetch_articles(source=source, sort_by=sort_by.value, limit=limit, page=page, min_score=min_score, q=q, tag=tag)
 
 
 @app.get("/articles/{article_id}", response_model=Article)
@@ -44,3 +45,8 @@ async def get_article(article_id: int):
 async def get_sources():
     from shared.database import fetch_sources
     return fetch_sources()
+
+@app.get("/tags", response_model=list[str])
+async def get_tags():
+    from shared.database import fetch_top_tags
+    return fetch_top_tags()

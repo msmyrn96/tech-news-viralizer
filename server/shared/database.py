@@ -61,6 +61,7 @@ def fetch_articles(
     page: int = 1,
     min_score: int | None = None,
     q: str | None = None,
+    tag: str | None = None,
 ) -> list[Article]:
     with get_connection() as conn:
         with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
@@ -76,6 +77,9 @@ def fetch_articles(
                 conditions.append("(title ILIKE %s OR summary ILIKE %s OR (virality_view->>'reason')::varchar ILIKE %s)")
                 like = f"%{q}%"
                 params.extend([like, like, like])
+            if tag is not None:
+                conditions.append("virality_view->'tags' @> %s::jsonb")
+                params.append(json.dumps([tag]))
             query = "SELECT * FROM articles"
             if conditions:
                 query += " WHERE " + " AND ".join(conditions)
@@ -146,3 +150,23 @@ def fetch_sources() -> list[str]:
         with conn.cursor() as cur:
             cur.execute("SELECT DISTINCT source FROM articles")
             return [row[0] for row in cur.fetchall()]
+
+
+def fetch_top_tags(limit: int = 10) -> list[str]:
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                """
+                SELECT tag, COUNT(*) AS cnt
+                FROM articles,
+                     jsonb_array_elements_text(virality_view->'tags') AS tag
+                WHERE virality_view IS NOT NULL
+                GROUP BY tag
+                ORDER BY cnt DESC
+                LIMIT %s
+                """,
+                (limit,),
+            )
+            return [row[0] for row in cur.fetchall()]
+        
+        
