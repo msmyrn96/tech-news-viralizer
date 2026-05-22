@@ -12,19 +12,23 @@ export interface FetchParams {
   page?: number
   min_score?: number
   q?: string
+  tag?: string
 }
 
 export async function fetchArticles(
   params: FetchParams = {},
 ): Promise<Article[]> {
+  const { source, sort_by, limit = 20, page, min_score, q, tag } = params
+
   const { data } = await api.get<Article[]>("/articles", {
     params: {
-      ...(params.source && { source: params.source }),
-      ...(params.sort_by && { sort_by: params.sort_by }),
-      limit: params.limit ?? 20,
-      ...(params.page && params.page > 1 && { page: params.page }),
-      ...(params.min_score !== undefined && { min_score: params.min_score }),
-      ...(params.q && { q: params.q }),
+      ...(source && { source }),
+      ...(sort_by && { sort_by }),
+      limit: limit ?? 20,
+      ...(page && page > 1 && { page }),
+      ...(min_score !== undefined && { min_score: min_score }),
+      ...(q && { q: q }),
+      ...(tag && { tag: tag }),
     },
   })
   return data
@@ -32,5 +36,10 @@ export async function fetchArticles(
 
 export async function fetchSources(): Promise<string[]> {
   const { data } = await api.get<string[]>("/sources")
+  return data
+}
+
+export async function fetchTopTags(): Promise<string[]> {
+  const { data } = await api.get<string[]>("/tags")
   return data
 }

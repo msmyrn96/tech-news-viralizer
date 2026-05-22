@@ -1,3 +1,5 @@
+import { Flame, LucideIcon, TrendingUp, Zap } from "lucide-react"
+
 export function relativeTime(dateStr?: string): string {
   if (!dateStr) return ""
   try {
@@ -39,3 +41,14 @@ export const sourceImageMapper: Record<string, string> = {
   ZDNet: "/images/zdnet.jpg",
   "The Atlantic": "/images/theatlantic.png",
 }
+
+export const SCORE_BUCKETS: {
+  label: string
+  min: number | null
+  Icon: LucideIcon | null
+}[] = [
+  { label: "All", min: null, Icon: null },
+  { label: "Rising", min: 50, Icon: TrendingUp },
+  { label: "Hot", min: 70, Icon: Flame },
+  { label: "Viral", min: 90, Icon: Zap },
+]
