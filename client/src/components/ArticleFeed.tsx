@@ -91,8 +91,8 @@ export function ArticleFeed() {
       {/* Filter bar */}
       <div className="flex flex-col border-b border-zinc-800 pb-3">
         {/* Row 1: search + sort */}
-        <div className="flex items-center gap-3 py-3 justify-between">
-          <div className="relative w-2xl">
+        <div className="flex items-center gap-3 py-3 justify-between flex-wrap">
+          <div className="relative md:w-xl w-2xl lg-2xl min-w-[250px]">
             <Search
               size={13}
               className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500 pointer-events-none"
