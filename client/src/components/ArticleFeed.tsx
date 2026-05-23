@@ -10,7 +10,7 @@ import FiltersPill from "./FiltersPill"
 
 export function ArticleFeed() {
   const [sortBy, setSortBy] = useState<SortBy>("score")
-  const [activeSource, setActiveSource] = useState<string | null>(null)
+  const [activeSources, setActiveSources] = useState<string[] | null>(null)
   const [minScore, setMinScore] = useState<number | null>(null)
   const [activeTag, setActiveTag] = useState<string | null>(null)
   const [searchInput, setSearchInput] = useState("")
@@ -26,7 +26,7 @@ export function ArticleFeed() {
       queryKey: [
         "articles",
         sortBy,
-        activeSource,
+        activeSources,
         minScore,
         activeTag,
         debouncedQ,
@@ -34,7 +34,7 @@ export function ArticleFeed() {
       queryFn: ({ pageParam }) =>
         fetchArticles({
           sort_by: sortBy,
-          source: activeSource ?? undefined,
+          sources: activeSources ?? undefined,
           limit: 20,
           page: pageParam,
           ...(minScore !== null && { min_score: minScore }),
@@ -119,8 +119,8 @@ export function ArticleFeed() {
 
           <div className="flex items-center gap-2 flex-shrink-0">
             <FiltersPill
-              activeSource={activeSource}
-              setActiveSource={setActiveSource}
+              activeSources={activeSources}
+              setActiveSources={setActiveSources}
               minScore={minScore}
               setMinScore={setMinScore}
               activeTag={activeTag}

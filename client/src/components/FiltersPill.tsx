@@ -9,8 +9,8 @@ import TagsSectionPill from "./TagsSectionPill"
 import ViralitySectionPill from "./ViralitySectionPill"
 
 type FiltersPillProps = {
-  activeSource: string | null
-  setActiveSource: (source: string | null) => void
+  activeSources: string[] | null
+  setActiveSources: (sources: string[] | null) => void
   activeTag: string | null
   setActiveTag: (tag: string | null) => void
   minScore: number | null
@@ -18,8 +18,8 @@ type FiltersPillProps = {
 }
 
 const FiltersPill = ({
-  activeSource,
-  setActiveSource,
+  activeSources,
+  setActiveSources,
   activeTag,
   setActiveTag,
   minScore,
@@ -28,7 +28,7 @@ const FiltersPill = ({
   const [open, setOpen] = useState(false)
 
   const activeCount =
-    Number(activeSource !== null) +
+    Number(activeSources !== null) +
     Number(activeTag !== null) +
     Number(minScore !== null)
 
@@ -73,8 +73,8 @@ const FiltersPill = ({
                 <div className="divide-y divide-zinc-800/60">
                   <div className="px-4">
                     <SourcesSectionPill
-                      activeSource={activeSource}
-                      setActiveSource={setActiveSource}
+                      activeSources={activeSources}
+                      setActiveSources={setActiveSources}
                     />
                   </div>
                   <div className="px-4">
@@ -95,7 +95,7 @@ const FiltersPill = ({
                   <div className="px-4 py-3 border-t border-zinc-800/60">
                     <button
                       onClick={() => {
-                        setActiveSource(null)
+                        setActiveSources(null)
                         setActiveTag(null)
                         setMinScore(null)
                       }}

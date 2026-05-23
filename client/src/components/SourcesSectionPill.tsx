@@ -2,13 +2,13 @@ import { fetchSources } from "@/lib/api"
 import { useQuery } from "@tanstack/react-query"
 
 type SourcesSectionPillProps = {
-  activeSource: string | null
-  setActiveSource: (source: string | null) => void
+  activeSources: string[] | null
+  setActiveSources: (sources: string[] | null) => void
 }
 
 const SourcesSectionPill = ({
-  activeSource,
-  setActiveSource,
+  activeSources,
+  setActiveSources,
 }: SourcesSectionPillProps) => {
   const { data: sources, isLoading: isLoadingSources } = useQuery({
     queryKey: ["sources"],
@@ -22,9 +22,9 @@ const SourcesSectionPill = ({
       </div>
       <div className="flex items-center gap-2 flex-wrap max-w-2xl">
         <button
-          onClick={() => setActiveSource(null)}
+          onClick={() => setActiveSources(null)}
           className={`px-3 py-1.5 rounded-full text-[11px] font-mono uppercase tracking-[0.1em] transition-all duration-150 active:scale-[0.97] cursor-pointer ${
-            activeSource === null
+            activeSources === null
               ? "bg-amber-400 text-zinc-950 font-semibold"
               : "bg-zinc-800 text-zinc-400 font-medium hover:bg-zinc-700 hover:text-zinc-200"
           }`}
@@ -43,10 +43,14 @@ const SourcesSectionPill = ({
               <button
                 key={source}
                 onClick={() =>
-                  setActiveSource(source === activeSource ? null : source)
+                  setActiveSources(
+                    activeSources?.includes(source)
+                      ? activeSources.filter((s) => s !== source)
+                      : [...(activeSources ?? []), source],
+                  )
                 }
                 className={`px-3 py-1.5 rounded-full text-[11px] font-mono uppercase tracking-[0.1em] transition-all duration-150 active:scale-[0.97] cursor-pointer ${
-                  activeSource === source
+                  activeSources?.includes(source)
                     ? "bg-amber-400 text-zinc-950 font-semibold"
                     : "bg-zinc-800 text-zinc-400 font-medium hover:bg-zinc-700 hover:text-zinc-200"
                 }`}

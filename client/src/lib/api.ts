@@ -3,10 +3,21 @@ import type { Article, SortBy } from "./types"
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000",
+  paramsSerializer: (params) => {
+    const parts: string[] = []
+    for (const [key, value] of Object.entries(params)) {
+      if (Array.isArray(value)) {
+        value.forEach((v) => parts.push(`${key}=${encodeURIComponent(v)}`))
+      } else if (value !== undefined && value !== null) {
+        parts.push(`${key}=${encodeURIComponent(value)}`)
+      }
+    }
+    return parts.join("&")
+  },
 })
 
 export interface FetchParams {
-  source?: string
+  sources?: string[]
   sort_by?: SortBy
   limit?: number
   page?: number
@@ -18,11 +29,11 @@ export interface FetchParams {
 export async function fetchArticles(
   params: FetchParams = {},
 ): Promise<Article[]> {
-  const { source, sort_by, limit = 20, page, min_score, q, tag } = params
+  const { sources, sort_by, limit = 20, page, min_score, q, tag } = params
 
   const { data } = await api.get<Article[]>("/articles", {
     params: {
-      ...(source && { source }),
+      ...(sources && { sources }),
       ...(sort_by && { sort_by }),
       limit: limit ?? 20,
       ...(page && page > 1 && { page }),
