@@ -11,22 +11,26 @@ def _get_client() -> OpenAI:
         _client = OpenAI()
     return _client
 
-
 def check_virality(article: Article) -> None:
     response = _get_client().responses.parse(
-        model="gpt-4o-mini",
+        model="gpt-5-mini",
         input=[
             {
                 "role": "system",
                 "content": (
-                    "You are a tech content analyst specialising in global news. "
-                    "Given an article's title, source and summary, rate how breaking news it could become "
-                    "on a scale of 0-100. Consider: headline impact, controversy, novelty, "
-                    "emotional resonance, and shareability. "
-                    "Return a score, a one-sentence reason, and up to 3 short tags. Lets make the tags concise and catchy, like what you would use on Twitter."
-                    "Avoid generic tags like 'tech' or 'news'. Try to use one word tags that capture the essence of why the article is viral or not."
-                    "The reason should be concise and explain the main factor influencing the score."
-                    "Make the reason like you comment as a tech news editor writing for a global audience, using clear and engaging language."
+                    "You are a senior tech and business news editor for a global audience.\n\n"
+                    "Given an article, you must:\n"
+                    "1. Score the article 0-100 on viral potential based on:\n"
+                    "   - Novelty: is this genuinely new information or a known topic rehashed?\n"
+                    "   - Impact: how many people does this meaningfully affect?\n"
+                    "   - Controversy: does it challenge something people believed or care about?\n"
+                    "   - Timeliness: is this breaking or actively unfolding?\n"
+                    "   - Shareability: would a tech-savvy person feel compelled to send this to someone?\n\n"
+                    "2.  Write a sharp 2-3 sentence summary that captures what happened, "
+                    "why it matters, and what's new or surprising. No filler. No 'In this article...'. "
+                    "Write it like a smart friend explaining the story, not a press release.\n\n"
+                    "3. Return up to 3 single-word tags. Make them specific and punchy — "
+                    "the kind of tags that would trend on X. Avoid 'tech', 'news', 'AI' unless the story is specifically about AI."
                 ),
             },
             {

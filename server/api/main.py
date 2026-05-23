@@ -29,7 +29,7 @@ app.add_middleware(
 
 @app.get("/articles", response_model=list[Article])
 async def get_articles(
-    source: str | None = None,
+    sources: list[str] | None = Query(default=None),
     sort_by: SortBy = SortBy.score,
     limit: int = Query(default=20, ge=1, le=100),
     page: int = Query(default=1, ge=1),
@@ -37,7 +37,7 @@ async def get_articles(
     q: str | None = Query(default=None, min_length=1, max_length=200),
     tag: str | None = Query(default=None, min_length=1, max_length=100),
 ):
-    return fetch_articles(source=source, sort_by=sort_by.value, limit=limit, page=page, min_score=min_score, q=q, tag=tag)
+    return fetch_articles(sources=sources, sort_by=sort_by.value, limit=limit, page=page, min_score=min_score, q=q, tag=tag)
 
 
 @app.get("/articles/{article_id}", response_model=Article)

@@ -55,7 +55,7 @@ def get_existing_urls() -> set[str]:
 
 
 def fetch_articles(
-    source: str | None = None,
+    sources: list[str] | None = None,
     sort_by: str = "score",
     limit: int = 20,
     page: int = 1,
@@ -67,9 +67,9 @@ def fetch_articles(
         with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
             conditions = []
             params: list = []
-            if source is not None:
-                conditions.append("source = %s")
-                params.append(source)
+            if sources is not None:
+                conditions.append("source = ANY(%s)")
+                params.append(sources)
             if min_score is not None:
                 conditions.append("(virality_view->>'score')::integer >= %s")
                 params.append(min_score)
