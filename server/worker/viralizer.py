@@ -13,7 +13,7 @@ def _get_client() -> OpenAI:
 
 def check_virality(article: Article) -> None:
     response = _get_client().responses.parse(
-        model="gpt-5-mini",
+        model="gpt-4o-mini",
         input=[
             {
                 "role": "system",
