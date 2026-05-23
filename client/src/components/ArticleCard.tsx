@@ -6,7 +6,12 @@ import { Clock, ArrowUpRight } from "lucide-react"
 import type { Article } from "@/lib/types"
 import { ViralityBadge } from "./ViralityBadge"
 import { ViralityReason } from "./ViralityReason"
-import { readTime, relativeTime, sourceImageMapper } from "@/lib/helpers"
+import {
+  checkTagHash,
+  readTime,
+  relativeTime,
+  sourceImageMapper,
+} from "@/lib/helpers"
 
 interface ArticleCardProps {
   article?: Article
@@ -106,17 +111,17 @@ export function ArticleCard({ article, featured = false }: ArticleCardProps) {
                 key={tag}
                 className="text-[12px] font-mono text-zinc-500 bg-zinc-800 px-2 py-0.5 rounded"
               >
-                #{tag}
+                {checkTagHash(tag)}
               </span>
             ))}
           </div>
 
           <div className="flex items-center gap-2.5 text-[11px] text-zinc-600 font-mono tabular-nums flex-shrink-0">
-            {time && <span suppressHydrationWarning>{time}</span>}
             <ArrowUpRight
               size={13}
               className="opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-[opacity,transform] duration-200 text-amber-400"
             />
+            {time && <span suppressHydrationWarning>{time}</span>}
           </div>
         </div>
       </div>

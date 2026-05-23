@@ -36,7 +36,7 @@ export function stripHtml(html: string): string {
 }
 
 export const sourceImageMapper: Record<string, string> = {
-  TechCrunch: "/images/techcrunch.png",
+  TechCrunch: "/images/techcrunch.webp",
   "Hacker News": "/images/hackernews.jpg",
   ZDNet: "/images/zdnet.jpg",
   "The Atlantic": "/images/theatlantic.png",
@@ -52,3 +52,7 @@ export const SCORE_BUCKETS: {
   { label: "Hot", min: 70, Icon: Flame },
   { label: "Viral", min: 90, Icon: Zap },
 ]
+
+export function checkTagHash(tag: string): string {
+  return tag.startsWith("#") ? tag : `#${tag}`
+}
