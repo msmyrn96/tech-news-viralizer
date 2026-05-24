@@ -13,7 +13,7 @@ def _get_client() -> OpenAI:
 
 def check_virality(article: Article) -> None:
     response = _get_client().responses.parse(
-        model="gpt-5-mini",
+        model="gpt-4o-mini",
         input=[
             {
                 "role": "system",
@@ -26,7 +26,7 @@ def check_virality(article: Article) -> None:
                     "   - Controversy: does it challenge something people believed or care about?\n"
                     "   - Timeliness: is this breaking or actively unfolding?\n"
                     "   - Shareability: would a tech-savvy person feel compelled to send this to someone?\n\n"
-                    "2.  Write a sharp 2-3 sentence summary that captures what happened, "
+                    "2.  Write a sharp 2 sentence summary that captures what happened, "
                     "why it matters, and what's new or surprising. No filler. No 'In this article...'. "
                     "Write it like a smart friend explaining the story, not a press release."
                     "Don't make it really extensive stick to 2 lines max.\n\n"
