@@ -1,7 +1,5 @@
 "use client"
 
-import { useState } from "react"
-import { motion, useReducedMotion } from "framer-motion"
 import { Clock, ArrowUpRight } from "lucide-react"
 import type { Article } from "@/lib/types"
 import { ViralityBadge } from "./ViralityBadge"
@@ -19,8 +17,6 @@ interface ArticleCardProps {
 }
 
 export function ArticleCard({ article, featured = false }: ArticleCardProps) {
-  const shouldReduceMotion = useReducedMotion()
-  const [imgLoaded, setImgLoaded] = useState(false)
   const { score, tags, reason } = article?.virality_view || {}
   const time = relativeTime(article?.published_at ?? undefined)
   const rt = readTime(article?.read_time_seconds ?? undefined) ?? 10
@@ -28,47 +24,29 @@ export function ArticleCard({ article, featured = false }: ArticleCardProps) {
   const image = article?.image_url ?? sourceImage ?? "/images/placeholder.png"
 
   return (
-    <motion.a
+    <a
       href={article?.url}
       target="_blank"
       rel="noopener noreferrer"
-      initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 10 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "0px 0px -40px 0px" }}
-      transition={{
-        duration: 0.28,
-        ease: [0.16, 1, 0.3, 1],
-      }}
-      whileHover={{
-        y: shouldReduceMotion ? 0 : -2,
-        transition: { type: "spring", stiffness: 400, damping: 30 },
-      }}
-      whileTap={{ scale: 0.97, transition: { duration: 0.1 } }}
-      className={`group flex overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900 transition-[border-color,box-shadow] duration-200 hover:border-zinc-700 hover:shadow-[0_0_0_1px_rgba(251,191,36,0.06),0_8px_24px_rgba(0,0,0,0.35)] ${
+      className={`group flex overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900 transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:border-zinc-700 hover:shadow-[0_0_0_1px_rgba(251,191,36,0.06),0_8px_24px_rgba(0,0,0,0.35)] active:scale-[0.97] active:transition-none ${
         featured ? "flex-col md:flex-row" : "flex-col"
       }`}
     >
       <div
-        className={`relative overflow-hidden flex-shrink-0 ${
+        className={`relative overflow-hidden flex-shrink-0 bg-zinc-800 ${
           featured
             ? "w-full md:w-[42%] aspect-video md:aspect-auto md:min-h-[240px]"
             : "aspect-video w-full"
         }`}
       >
-        <>
-          <div
-            className={`absolute inset-0 skeleton-shimmer transition-opacity duration-500 ${imgLoaded ? "opacity-0" : "opacity-100"}`}
-          />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={image}
-            alt={article?.title ?? "Article image"}
-            loading={featured ? "eager" : "lazy"}
-            decoding="async"
-            onLoad={() => setImgLoaded(true)}
-            className={`absolute inset-0 w-full h-full object-cover transition-[transform,opacity] duration-500 ease-out group-hover:scale-[1.03] ${imgLoaded ? "opacity-100" : "opacity-0"}`}
-          />
-        </>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={image}
+          alt={article?.title ?? "Article image"}
+          loading={featured ? "eager" : "lazy"}
+          decoding="async"
+          className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+        />
 
         <div className="absolute inset-0 bg-gradient-to-t from-zinc-900/60 via-zinc-900/20 to-transparent transition-opacity duration-300 group-hover:opacity-60" />
       </div>
@@ -125,6 +103,6 @@ export function ArticleCard({ article, featured = false }: ArticleCardProps) {
           </div>
         </div>
       </div>
-    </motion.a>
+    </a>
   )
 }

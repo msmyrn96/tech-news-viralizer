@@ -26,11 +26,10 @@ const FiltersPill = ({
   setMinScore,
 }: FiltersPillProps) => {
   const [open, setOpen] = useState(false)
+  const hasSources = activeSources !== null && activeSources.length > 0
 
   const activeCount =
-    Number(activeSources !== null) +
-    Number(activeTag !== null) +
-    Number(minScore !== null)
+    Number(hasSources) + Number(activeTag !== null) + Number(minScore !== null)
 
   return (
     <Popover.Root open={open} onOpenChange={setOpen}>

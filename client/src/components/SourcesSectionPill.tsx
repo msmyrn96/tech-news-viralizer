@@ -15,6 +15,8 @@ const SourcesSectionPill = ({
     queryFn: fetchSources,
   })
 
+  const hasSources = activeSources !== null && activeSources.length > 0
+
   return (
     <div className="py-3">
       <div className="w-16 flex-shrink-0 text-right text-[12px] font-mono text-zinc-500 uppercase tracking-[0.12em] mb-2">
@@ -24,7 +26,7 @@ const SourcesSectionPill = ({
         <button
           onClick={() => setActiveSources(null)}
           className={`px-3 py-1.5 rounded-full text-[11px] font-mono uppercase tracking-[0.1em] transition-all duration-150 active:scale-[0.97] cursor-pointer ${
-            activeSources === null
+            !hasSources
               ? "bg-amber-400 text-zinc-950 font-semibold"
               : "bg-zinc-800 text-zinc-400 font-medium hover:bg-zinc-700 hover:text-zinc-200"
           }`}
