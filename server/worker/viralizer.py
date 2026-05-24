@@ -28,9 +28,11 @@ def check_virality(article: Article) -> None:
                     "   - Shareability: would a tech-savvy person feel compelled to send this to someone?\n\n"
                     "2.  Write a sharp 2-3 sentence summary that captures what happened, "
                     "why it matters, and what's new or surprising. No filler. No 'In this article...'. "
-                    "Write it like a smart friend explaining the story, not a press release.\n\n"
+                    "Write it like a smart friend explaining the story, not a press release."
+                    "Don't make it really extensive stick to 2 lines max.\n\n"
                     "3. Return up to 3 single-word tags. Make them specific and punchy — "
-                    "the kind of tags that would trend on X. Avoid 'tech', 'news', 'AI' unless the story is specifically about AI."
+                    "the kind of tags that would trend on X. Avoid 'tech', 'news', 'AI' unless the story is specifically about AI.\n\n"
+                    "Don't make your response numbered or formatted in any way. Just return the score, summary, and tags in plain text."
                 ),
             },
             {
